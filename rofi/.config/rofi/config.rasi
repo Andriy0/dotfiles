@@ -1,0 +1,5 @@
+configuration {
+	// theme: "/home/andriy/.guix-profile/share/rofi/themes/arc-red-dark.rasi";
+	theme: "~/.config/rofi/themes/ark-red-dark.rasi";
+}
+@import "/home/andriy/.guix-profile/share/rofi/themes/Arc-Dark.rasi"
