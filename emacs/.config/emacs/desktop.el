@@ -207,16 +207,16 @@
     (4 "")))
 
 (setq exwm-workspace-index-map
-        (lambda (index)
-          (let ((named-workspaces ["code" "brow" "extr" "slac" "lisp"]))
-            (if (< index (length named-workspaces))
-                (elt named-workspaces index)
-              (number-to-string index)))))
+      (lambda (index)
+	(let ((named-workspaces ["code" "brow" "extr" "slac" "lisp"]))
+	  (if (< index (length named-workspaces))
+	      (elt named-workspaces index)
+	    (number-to-string index)))))
 
 (defun exwm-workspace--update-ewmh-desktop-names ()
   (xcb:+request exwm--connection
-      (make-instance 'xcb:ewmh:set-_NET_DESKTOP_NAMES
-                     :window exwm--root :data
-                     (mapconcat (lambda (i) (funcall exwm-workspace-index-map i))
-                                (number-sequence 0 (1- (exwm-workspace--count)))
-                                "\0"))))
+		(make-instance 'xcb:ewmh:set-_NET_DESKTOP_NAMES
+			       :window exwm--root :data
+			       (mapconcat (lambda (i) (funcall exwm-workspace-index-map i))
+					  (number-sequence 0 (1- (exwm-workspace--count)))
+					  "\0"))))

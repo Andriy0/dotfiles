@@ -53,7 +53,7 @@
    "volumeicon"
    "blueman"
    ;; "compton"
-   "redshift"
+   "redshift-wayland"
    ;; "gucharmap"
    "fontmanager"
    "xdg-utils"      ;; For xdg-open, etc
@@ -75,13 +75,6 @@
    "openssh"
    "zip"
    "unzip"
-   "fish"
-   "python"
-   "ncurses"
-   ;; Consumer apps for automatically exporting the paths
-   "man-db"
-   "info-reader"
-   "pkg-config"
    
    "xev"
    "xprop"
@@ -98,5 +91,9 @@
    "libinput"
    "xinput"
    "xscreensaver"
+   
+   "fish"
+   "python"
+   "ncurses"
    
 ))
