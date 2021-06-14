@@ -82,6 +82,33 @@ gc-cons-threshold)))
 
 "emacs-esup"
 
+(eval-after-load 'ivy-rich
+  (progn
+    (defvar ek/ivy-rich-cache
+      (make-hash-table :test 'equal))
+
+    (defun ek/ivy-rich-cache-lookup (delegate candidate)
+      (let ((result (gethash candidate ek/ivy-rich-cache)))
+        (unless result
+          (setq result (funcall delegate candidate))
+          (puthash candidate result ek/ivy-rich-cache))
+        result))
+
+    (defun ek/ivy-rich-cache-reset ()
+      (clrhash ek/ivy-rich-cache))
+
+    (defun ek/ivy-rich-cache-rebuild ()
+      (mapc (lambda (buffer)
+              (ivy-rich--ivy-switch-buffer-transformer (buffer-name buffer)))
+            (buffer-list)))
+
+    (defun ek/ivy-rich-cache-rebuild-trigger ()
+      (ek/ivy-rich-cache-reset)
+      (run-with-idle-timer 1 nil 'ek/ivy-rich-cache-rebuild))
+
+    (advice-add 'ivy-rich--ivy-switch-buffer-transformer :around 'ek/ivy-rich-cache-lookup)
+    (advice-add 'ivy-switch-buffer :after 'ek/ivy-rich-cache-rebuild-trigger)))
+
 ;; Initialize package sources
 ;; (require 'package)
 
@@ -158,10 +185,10 @@ gc-cons-threshold)))
     "t"  '(:ignore t :which-key "toggles")
     "tt" '(counsel-load-theme :which-key "choose theme")
     "c" '(:ignore t :which-key "configs")
-    "ca" '((lambda () (interactive) (find-file "~/org-files/Emacs.org")) :which-key "Emacs.org")
-    "cb" '((lambda () (interactive) (find-file "~/org-files/Desktop.org")) :which-key "Desktop.org")
-    "cc" '((lambda () (interactive) (find-file "~/.config/guix/system/config.scm")) :which-key "config.scm")
-    "cd" '((lambda () (interactive) (find-file "~/.config/awesome/rc.lua")) :which-key "rc.lua")))
+    "ca" '((lambda () (interactive) (find-file "~/dotfiles/org-files/org-files/Emacs.org")) :which-key "Emacs.org")
+    "cb" '((lambda () (interactive) (find-file "~/dotfiles/org-files/org-files/Desktop.org")) :which-key "Desktop.org")
+    "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
+    "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")))
 
 (use-package evil
   :init
@@ -237,20 +264,23 @@ gc-cons-threshold)))
 
 "emacs-which-key"
 
+(use-package savehist
+  :init
+  (savehist-mode 1))
+
+(use-package prescient
+  :init
+  (setq prescient-persist-mode 1))
+
 (use-package vertico
+  :disabled
   :custom
   (vertico-cycle t)
   :init
   (vertico-mode 1))
 
-(use-package savehist
-  :init
-  (savehist-mode 1))
-  
-(use-package prescient
-  :after vertico)
-  
 (use-package marginalia
+  :disabled
   :after vertico
   :custom
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
@@ -258,6 +288,7 @@ gc-cons-threshold)))
   (marginalia-mode 1))
 
 (use-package consult
+  :disabled
   :after vertico
   :bind
   (("C-s" . consult-line)
@@ -272,6 +303,74 @@ gc-cons-threshold)))
 "emacs-consult"
 "emacs-prescient"
 "emacs-marginalia"
+
+(use-package helm
+  :disabled
+  :bind ("M-x" . helm-M-x)
+  :config
+  (setq completion-styles '(flex))
+  (setq helm-display-function 'helm-display-buffer-in-own-frame)
+  :init
+  (helm-mode 1))
+
+(use-package ivy
+  ;; :diminish
+  :bind (("C-s" . swiper)
+	 :map ivy-minibuffer-map
+	 ("TAB" . ivy-alt-done)
+	 ("C-l" . ivy-alt-done)
+	 ("C-j" . ivy-next-line)
+	 ("C-k" . ivy-previous-line)
+	 :map ivy-switch-buffer-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-l" . ivy-done)
+	 ("C-d" . ivy-switch-buffer-kill)
+	 :map ivy-reverse-i-search-map
+	 ("C-k" . ivy-previous-line)
+	 ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (setq ivy-wrap t)
+  (ivy-mode 1))
+
+(use-package ivy-prescient
+  :after ivy
+  :config
+  (ivy-prescient-mode 1))
+
+(use-package ivy-rich
+  ;; :init (ivy-rich-mode 1)
+  :after ivy
+  :config
+  (ivy-rich-mode 1))
+
+(use-package counsel
+  :bind (("C-M-j" . 'counsel-switch-buffer)
+	 :map minibuffer-local-map
+	 ("C-r" . 'counsel-minibuffer-history))
+  :custom
+  (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+  :config
+  (counsel-mode 1))
+
+(use-package swiper
+  :commands swiper)
+
+(use-package ivy-posframe
+  :disabled
+  :after ivy
+  :custom
+  (ivy-posframe-display-functions-alist
+   '((swiper          . ivy-posframe-display-at-point)
+     (complete-symbol . ivy-posframe-display-at-point)
+     (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
+     (t               . ivy-posframe-display)))
+  (ivy-posframe-parameters 
+   '((alpha . 80)                                   
+     ;; (parent-frame nil)
+     (left-fringe . 7)                                                   
+     (right-fringe . 7)))
+  :config 
+  (ivy-posframe-mode 1))
 
 (use-package diminish)
 
