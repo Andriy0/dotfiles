@@ -46,8 +46,8 @@ font-1 = "Font Awesome:size=13;2"
 font-2 = "Material Icons:size=15;3"
 font-3 = "Fira Mono:size=13;-3"
 
-modules-left = cpu temperature
-modules-right = battery date
+modules-left = 
+modules-right = xkeyboard date battery
 
 tray-position = right
 tray-padding = 2
@@ -75,6 +75,22 @@ enable-click = false
 ; Default: true
 enable-scroll = false
 
+icon-0 = noll;🙃
+
+icon-1 = ett;⚀
+
+icon-2 = två;⚁
+
+icon-3 = tre;⚂
+
+icon-4 = fyra;⚃
+
+icon-5 = fem;⚄
+
+icon-6 = sex;⚅
+
+icon-default = ☐
+
 [module/exwm-workspace]
 type = custom/ipc
 hook-0 = emacsclient -e "(efs/polybar-exwm-workspace)" | sed -e 's/^"//' -e 's/"$//'
@@ -98,6 +114,13 @@ ramp-coreload-3 = ▄
 ramp-coreload-4 = ▅
 ramp-coreload-5 = ▆
 ramp-coreload-6 = ▇
+
+ [module/xkeyboard]
+type = internal/xkeyboard
+
+; List of indicators to ignore
+blacklist-0 = num lock
+blacklist-1 = scroll lock
 
 [module/date]
 type = internal/date

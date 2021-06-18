@@ -229,7 +229,7 @@ gc-cons-threshold)))
 
 (use-package modus-themes)
 
-;; (use-package doom-themes)
+(use-package doom-themes)
 
 "emacs-modus-themes"
 
@@ -253,7 +253,7 @@ gc-cons-threshold)))
   ;; :init (which-key-mode)
   :diminish which-key-mode
   :custom
-  (which-key-idle-delay 2)
+  (which-key-idle-delay 1)
   :config
   (which-key-mode))
   
@@ -269,6 +269,7 @@ gc-cons-threshold)))
   (savehist-mode 1))
 
 (use-package prescient
+  :disabled
   :init
   (setq prescient-persist-mode 1))
 
@@ -314,26 +315,28 @@ gc-cons-threshold)))
   (helm-mode 1))
 
 (use-package ivy
-  ;; :diminish
+  :diminish ivy-mode
   :bind (("C-s" . swiper)
 	 :map ivy-minibuffer-map
 	 ("TAB" . ivy-alt-done)
-	 ("C-l" . ivy-alt-done)
-	 ("C-j" . ivy-next-line)
-	 ("C-k" . ivy-previous-line)
+	 ;; ("C-l" . ivy-alt-done)
+	 ;; ("C-j" . ivy-next-line)
+	 ;; ("C-k" . ivy-previous-line)
 	 :map ivy-switch-buffer-map
-	 ("C-k" . ivy-previous-line)
-	 ("C-l" . ivy-done)
+	 ;; ("C-k" . ivy-previous-line)
+	 ;; ("C-l" . ivy-done)
 	 ("C-d" . ivy-switch-buffer-kill)
 	 :map ivy-reverse-i-search-map
-	 ("C-k" . ivy-previous-line)
+	 ;; ("C-k" . ivy-previous-line)
 	 ("C-d" . ivy-reverse-i-search-kill))
   :config
-  (setq ivy-wrap t)
+  ;; (setq ivy-wrap t)
   (ivy-mode 1))
 
 (use-package ivy-prescient
   :after ivy
+  :custom
+  (prescient-persist-mode t)
   :config
   (ivy-prescient-mode 1))
 
@@ -377,15 +380,14 @@ gc-cons-threshold)))
 "emacs-diminish"
 
 (use-package helpful
-  ;; :custom
-  ;; (counsel-describe-function-function #'helpful-callable)
-  ;; (counsel-describe-variable-function #'helpful-variable)
-  ;; :bind
-  ;; ([remap describe-function] . counsel-describe-function)
-  ;; ([remap describe-command] . helpful-command)
-  ;; ([remap describe-variable] . counsel-describe-variable)
-  ;; ([remap describe-key] . helpful-key)
-  )
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
 
 "emacs-helpful"
 

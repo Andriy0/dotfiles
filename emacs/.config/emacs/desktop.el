@@ -1,3 +1,19 @@
+(use-package ivy-posframe
+  :after ivy
+  :custom
+  (ivy-posframe-display-functions-alist
+   '((swiper          . ivy-posframe-display-at-point)
+     (complete-symbol . ivy-posframe-display-at-point)
+     (counsel-M-x     . ivy-posframe-display-at-window-bottom-left)
+     (t               . ivy-posframe-display)))
+  (ivy-posframe-parameters 
+   '((alpha . 80)                                   
+     ;; (parent-frame nil)
+     (left-fringe . 7)                                                   
+     (right-fringe . 7)))
+  :config 
+  (ivy-posframe-mode 1))
+
 (defun efs/run-in-background (command)
     (let ((command-parts (split-string command "[ ]+")))
       (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
@@ -109,16 +125,16 @@
 
   ;; These keys should always pass through to Emacs
   (setq exwm-input-prefix-keys
-        '(?\C-x
-          ?\C-u
-          ?\C-h
-          ?\M-x
-          ?\M-`
-          ?\M-&
-          ?\M-:
-          ?\M-!
-          ?\C-\M-j  ;; Buffer list
-          ?\C-\ ))  ;; Ctrl+Space
+	'(?\C-x
+	  ?\C-u
+	  ?\C-h
+	  ?\M-x
+	  ?\M-`
+	  ?\M-&
+	  ?\M-:
+	  ?\M-!
+	  ?\C-\M-j  ;; Buffer list
+	  ?\C-\ ))  ;; Ctrl+Space
 
   ;; Ctrl+Q will enable the next key to be sent directly
   (define-key exwm-mode-map [?\C-q] 'exwm-input-send-next-key)
@@ -126,38 +142,42 @@
   ;; Set up global key bindings.  These always work, no matter the input state!
   ;; Keep in mind that changing this list after EXWM initializes has no effect.
   (setq exwm-input-global-keys
-        `(;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
-          ([?\s-r] . exwm-reset)
+	`(;; Reset to line-mode (C-c C-k switches to char-mode via exwm-input-release-keyboard)
+	  ([?\s-r] . exwm-reset)
 
-          ;; Move between windows
-          ([s-left] . windmove-left)
-          ([?\s-h] . windmove-left)
-          ([s-right] . windmove-right)
-          ([?\s-l] . windmove-right)
-          ([s-up] . windmove-up)
-          ([?\s-k] . windmove-up)
-          ([s-down] . windmove-down)
-          ([?\s-j] . windmove-down)
+	  ;; Move between windows
+	  ([s-left] . windmove-left)
+	  ([?\s-h] . windmove-left)
+	  ([s-right] . windmove-right)
+	  ([?\s-l] . windmove-right)
+	  ([s-up] . windmove-up)
+	  ([?\s-k] . windmove-up)
+	  ([s-down] . windmove-down)
+	  ([?\s-j] . windmove-down)
 
-          ;; Launch applications via shell command
-          ([?\s-&] . (lambda (command)
-                       (interactive (list (read-shell-command "$ ")))
-                       (start-process-shell-command command nil command)))
+	  ;; Launch applications via shell command
+	  ([?\s-&] . (lambda (command)
+		       (interactive (list (read-shell-command "$ ")))
+		       (start-process-shell-command command nil command)))
 
-          ;; Switch workspace
-          ([?\s-w] . exwm-workspace-switch)
-          ([?\s-`] . (lambda () (interactive)
-                       (exwm-workspace-switch-create 0)))
+	  ;; Switch workspace
+	  ([?\s-w] . exwm-workspace-switch)
+	  ([?\s-`] . (lambda () (interactive)
+		       (exwm-workspace-switch-create 0)))
 
-          ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
-          ,@(mapcar (lambda (i)
-                      `(,(kbd (format "s-%d" i)) .
-                        (lambda ()
-                          (interactive)
-                          (exwm-workspace-switch-create ,i))))
-                    (number-sequence 0 9))))
+	  ;; 's-N': Switch to certain workspace with Super (Win) plus a number key (0 - 9)
+	  ,@(mapcar (lambda (i)
+		      `(,(kbd (format "s-%d" i)) .
+			(lambda ()
+			  (interactive)
+			  (exwm-workspace-switch-create ,i))))
+		    (number-sequence 0 9))))
 
-  ;; (exwm-input-set-key (kbd "s-SPC") 'counsel-linux-app)
+  (exwm-input-set-key (kbd "s-d") 'counsel-linux-app)
+  ;; (exwm-input-set-key (kbd "s-d")
+  ;; 		      '(lambda ()
+  ;; 			 (interactive)
+  ;; 			 (start-process-shell-command "rofi" nil "rofi -show run")))
 
   ;; Resize windows
   (defmacro efs/resize-helper (resize-window-function)
@@ -171,7 +191,7 @@
 
   (exwm-enable))
 
-(server-start)
+;; (server-start)
 
 (use-package desktop-environment
   :after exwm
