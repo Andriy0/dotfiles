@@ -15,8 +15,8 @@
  '(
    ;; "emacs-native-comp@28.0.50-149"
    ;; "emacs-native-comp"
-   "emacs-pgtk-native-comp"
-   ;; "emacs-next"
+   ;; "emacs-pgtk-native-comp"
+   "emacs-next"
    ;; "emacs"
 
    ;; "emacs-exwm"
