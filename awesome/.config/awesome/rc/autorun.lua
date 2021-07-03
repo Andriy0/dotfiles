@@ -49,7 +49,7 @@ autorunApps =
       "mpDris2",
       -- "emacs --daemon",
       "redshift",
-      "xscreensaver -no-splash"
+      -- "xscreensaver -no-splash"
    }
 if autorun then
    for app = 1, #autorunApps do
