@@ -106,14 +106,14 @@ EndSection
  ;;        (list (channel
  ;;               (name 'nonguix)
  ;;               (url "https://gitlab.com/nonguix/nonguix")
- ;;               (commit "d3c5eea0cbfe3e5bfbcf1fe15bc916fefacc624f"))
+ ;;               (commit "706d8af5b111d85902280f1154dc4fad683b5281"))
  ;;              (channel
  ;;               (name 'guix)
  ;;               (url "https://git.savannah.gnu.org/git/guix.git")
- ;;               (commit "b65c02e2d35af6fbe1d1810d6c69cfab194e13e2"))))
+ ;;               (commit "bf9dc7568272e28b79dd1ae3610c3ac83cc216a6"))))
  ;;       (inferior
  ;;        (inferior-for-channels channels)))
- ;;    (first (lookup-inferior-packages inferior "linux" "5.12.9"))))
+ ;;    (first (lookup-inferior-packages inferior "linux" "5.12.13"))))
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
@@ -230,9 +230,8 @@ EndSection
 	    (sddm-configuration
 	     (numlock "off")
 	     (themes-directory "/home/andriy/.local/share/sddm/themes")
-	     ;; (theme "maldives")
 	     (theme "chili")
-	     ;; (xsessions-directory "/etc/X11/xsessions")
+	     (sessions-directory "/home/andriy/.local/share/wayland-sessions")
 	     (xsessions-directory "/home/andriy/.local/share/xsessions")
 	     (xorg-configuration
 	      (xorg-configuration
