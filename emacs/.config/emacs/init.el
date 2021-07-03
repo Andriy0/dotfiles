@@ -317,8 +317,8 @@ gc-cons-threshold)))
 (use-package ivy
   :diminish ivy-mode
   :bind (("C-s" . swiper)
-	 :map ivy-minibuffer-map
-	 ("TAB" . ivy-alt-done)
+	 ;; :map ivy-minibuffer-map
+	 ;; ("TAB" . ivy-alt-done)
 	 ;; ("C-l" . ivy-alt-done)
 	 ;; ("C-j" . ivy-next-line)
 	 ;; ("C-k" . ivy-previous-line)
@@ -440,7 +440,7 @@ gc-cons-threshold)))
   (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
 
 (defun efs/org-mode-setup ()
-  (org-indent-mode 0)
+  (org-indent-mode 1)
   (variable-pitch-mode 1)
   (visual-line-mode 0))
 
@@ -775,3 +775,15 @@ gc-cons-threshold)))
   :defer t)
 
 "emacs-guix"
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-agenda-files '("~/Documents/org/hello.org")))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
