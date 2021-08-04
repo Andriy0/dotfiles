@@ -40,6 +40,7 @@
    "libva-utils"
    
    "feh"
+   "imv"
    "gimp"
    "scrot"
    
@@ -61,12 +62,30 @@
    "gtk+:bin"       ;; For gtk-launch
    "glib:bin"       ;; For gio-launch-desktop
    "shared-mime-info"
+   "rofi"
    "wofi"
    "waybar"
    "swayidle"
    "swaylock"
    "wl-clipboard"
    "mako"
+   "flameshot"
+   "evince"
+   "deluge"
+   "libreoffice"
+   "telegram-desktop"
+   "qalculate-gtk"
+   "pcmanfm"
+   "foot"
+   "slock"
+   "i3lock"
+   ;; xmonad stuff
+   "xmonad"
+   "xmobar"
+   "ghc-xmonad-contrib"
+   "ghc@8.6.5"
+   "stalonetray"
+   "dunst"
    
    "btrfs-progs"
    "htop"
@@ -75,6 +94,7 @@
    "openssh"
    "zip"
    "unzip"
+   "stow"
    
    "xev"
    "xprop"
