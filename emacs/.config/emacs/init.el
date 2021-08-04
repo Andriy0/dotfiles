@@ -145,7 +145,7 @@ gc-cons-threshold)))
 ;;  Effectively replace use-package with straight-use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
-(setq straight-check-for-modifications '(check-on-save find-when-checking))
+;; (setq straight-check-for-modifications '(check-on-save find-when-checking))
 
 "emacs-use-package"
 
@@ -317,20 +317,21 @@ gc-cons-threshold)))
 (use-package ivy
   :diminish ivy-mode
   :bind (("C-s" . swiper)
-	 ;; :map ivy-minibuffer-map
-	 ;; ("TAB" . ivy-alt-done)
-	 ;; ("C-l" . ivy-alt-done)
-	 ;; ("C-j" . ivy-next-line)
-	 ;; ("C-k" . ivy-previous-line)
-	 :map ivy-switch-buffer-map
-	 ;; ("C-k" . ivy-previous-line)
-	 ;; ("C-l" . ivy-done)
-	 ("C-d" . ivy-switch-buffer-kill)
-	 :map ivy-reverse-i-search-map
-	 ;; ("C-k" . ivy-previous-line)
-	 ("C-d" . ivy-reverse-i-search-kill))
+         ;; :map ivy-minibuffer-map
+         ;; ("TAB" . ivy-alt-done)
+         ;; ("C-l" . ivy-alt-done)
+         ;; ("C-j" . ivy-next-line)
+         ;; ("C-k" . ivy-previous-line)
+         :map ivy-switch-buffer-map
+         ;; ("C-k" . ivy-previous-line)
+         ;; ("C-l" . ivy-done)
+         ("C-d" . ivy-switch-buffer-kill)
+         :map ivy-reverse-i-search-map
+         ;; ("C-k" . ivy-previous-line)
+         ("C-d" . ivy-reverse-i-search-kill))
   :config
   ;; (setq ivy-wrap t)
+  (setq ivy-use-selectable-prompt 1)
   (ivy-mode 1))
 
 (use-package ivy-prescient
@@ -348,8 +349,8 @@ gc-cons-threshold)))
 
 (use-package counsel
   :bind (("C-M-j" . 'counsel-switch-buffer)
-	 :map minibuffer-local-map
-	 ("C-r" . 'counsel-minibuffer-history))
+         :map minibuffer-local-map
+         ("C-r" . 'counsel-minibuffer-history))
   :custom
   (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
   :config
@@ -775,15 +776,3 @@ gc-cons-threshold)))
   :defer t)
 
 "emacs-guix"
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-agenda-files '("~/Documents/org/hello.org")))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
