@@ -1,4 +1,4 @@
--- Base
+   -- Base
 import XMonad
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
@@ -76,56 +76,31 @@ import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
 
 myFont :: String
-  myFont="xft:MononokiNerdFont:bold:size=13:antialias=true:hinting=true"
+myFont = "xft:Mononoki Nerd Font:bold:size=13:antialias=true:hinting=true"
 
-  myTerminal :: String
-  myTerminal = "alacritty"
+myTerminal :: String
+myTerminal = "alacritty"
 
-  myBrowser :: String 
-  myBrowser = "chromium"
+myBrowser :: String 
+myBrowser = "chromium"
 
-  myFocusFollowsMouse :: Bool
-  myFocusFollowsMouse = True
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
 
-  myClickJustFocuses :: Bool
-  myClickJustFocuses = False
+myClickJustFocuses :: Bool
+myClickJustFocuses = False
 
-  myBorderWidth :: Dimension
-  myBorderWidth   = 1
+myBorderWidth :: Dimension
+myBorderWidth   = 1
 
-  myModMask :: KeyMask
-  myModMask       = mod4Mask
+myModMask :: KeyMask
+myModMask       = mod4Mask
 
-  myNormalBorderColor  = "#292d3e"
-  myFocusedBorderColor = "#bbc5ff"
+myNormalBorderColor  = "#292d3e"
+myFocusedBorderColor = "#bbc5ff"
 
-  myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
-
-xmobarEscape :: String -> String
-xmobarEscape = concatMap doubleLts
-  where
-        doubleLts '<' = "<<"
-        doubleLts x   = [x]
-
-myClickableWorkspaces :: [String]
-myClickableWorkspaces = clickable . (map xmobarEscape)
-             $ [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
-            --  $ [" dev ", " www ", " sys ", " doc ", " vbox ", " chat ", " mus ", " vid ", " gfx "]
-    where
-      clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
-                    (i,ws) <- zip [1..9] l,
-                    let n = i ]
-
-  windowCount :: X (Maybe String)
-  windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
-
-  mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
-  mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
-
-  -- Below is a variation of the above except no borders are applied
-  -- if fewer than two windows. So a single window has no gaps.
-  -- mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
-  -- mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
+windowCount :: X (Maybe String)
+windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
 
 myScratchPads :: [NamedScratchpad]
 myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
@@ -142,6 +117,29 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  w = 0.4
                  t = 0.55 -h
                  l = 0.45 -w
+
+myStartupHook :: X ()
+myStartupHook = do
+    spawnOnce "xset r rate 300 50"
+    spawnOnce "xsetroot -cursor_name left_ptr"
+    spawnOnce "~/.fehbg"
+    spawnOnce "xsettingsd"
+    spawnOnce "picom"
+    spawnOnce "nm-applet"
+    spawnOnce "pasystray"
+    spawnOnce "stalonetray --geometry=-500+0 --background=#282c34"
+    spawnOnce "dunst"
+    spawnOnce "mpd"
+    spawnOnce "mpDris2"
+    setWMName "LG3D"
+
+mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
+
+-- Below is a variation of the above except no borders are applied
+-- if fewer than two windows. So a single window has no gaps.
+mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
+mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 -- Defining a bunch of layouts, many that I don't use.
 tall     = renamed [Replace "tall"]
@@ -238,6 +236,23 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                                 --  ||| threeCol
                                 --  ||| threeRow
 
+myWorkspaces = [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
+
+xmobarEscape :: String -> String
+xmobarEscape = concatMap doubleLts
+  where
+        doubleLts '<' = "<<"
+        doubleLts x   = [x]
+
+myClickableWorkspaces :: [String]
+myClickableWorkspaces = clickable . (map xmobarEscape)
+               $ [" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "]
+              --  $ [" dev ", " www ", " sys ", " doc ", " vbox ", " chat ", " mus ", " vid ", " gfx "]
+  where
+        clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
+                      (i,ws) <- zip [1..9] l,
+                      let n = i ]
+
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
     [ title =? "Mozilla Firefox" --> doShift ( myClickableWorkspaces !! 1 )
@@ -294,10 +309,11 @@ myKeys =
         -- , ("M-S-<Return>", spawn $ myTerminal ++ " --class float_term")
         -- , ("M-p", spawn "dmenu_run -fn 'Mononoki Nerd Font Bold Mono-13'") -- launch dmenu
         , ("M-d", spawn "rofi -show run")
-        , ("M-x", spawn "betterlockscreen -l dimblur") -- lock screen
+        -- , ("M-x", spawn "betterlockscreen -l dimblur") -- lock screen
+        , ("M-x", spawn "slock") -- lock screen
         , ("M-s", spawn "flameshot gui") -- flameshot
         , ("M-S-s", spawn "gscreenshot") -- gscreenshot
-
+    
     -- Scratchpads
         , ("M-e", namedScratchpadAction myScratchPads "terminal")
         , ("M-r", namedScratchpadAction myScratchPads "mpv_term")
@@ -333,8 +349,8 @@ myKeys =
         , ("M-<F8>", spawn "playerctl next")
 
     -- Brightness Controls
-        , ("<XF86MonBrightnessUp>", spawn "doas light -A 1")
-        , ("<XF86MonBrightnessDown>", spawn "doas light -U 1")
+        , ("<XF86MonBrightnessUp>", spawn "light -A 1")
+        , ("<XF86MonBrightnessDown>", spawn "light -U 1")
 
     -- Misc
         , ("M-,", sendMessage (IncMasterN 1)) -- Increment the number of windows in the master area
@@ -352,57 +368,39 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
                                        >> windows W.shiftMaster)) -- mod-button3, Set the window to floating mode and resize by dragging
     ]
 
-myStartupHook :: X ()
-myStartupHook = do
-    spawnOnce "xset r rate 300 50"
-    spawnOnce "xsetroot -cursor_name left_ptr"
-    spawnOnce "nitrogen --restore"
-    spawnOnce "picom"
-    spawnOnce "nm-applet"
-    spawnOnce "volumeicon"
-    spawnOnce "trayer --edge top --distancefrom left --distance 380 --align center --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --transparent true --alpha 0 --tint 0x282c34  --height 22"
-    -- spawnOnce myTerminal
-    -- spawnOnce "telegram-desktop"
-    -- spawnOnce "code-oss"
-    -- spawnOnce "goldendict"
-    -- spawnOnce myBrowser
-    -- spawnOnce "qutebrowser"
-    spawnOnce "mpd"
-    spawnOnce "mpDris2"
-    -- spawnOnce "emacs --daemon"
-    setWMName "LG3D"
 
 main = do 
-  xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobar.hs"
-  xmonad $ ewmh $ def
-    -- simple stuff
-      { terminal           = myTerminal
-      , focusFollowsMouse  = myFocusFollowsMouse
-      , clickJustFocuses   = myClickJustFocuses
-      , borderWidth        = myBorderWidth
-      , modMask            = myModMask
-      , workspaces         = myClickableWorkspaces
-      , normalBorderColor  = myNormalBorderColor
-      , focusedBorderColor = myFocusedBorderColor
+    xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobar.hs"
+    xmonad $ ewmh def
+      -- simple stuff
+        { terminal           = myTerminal
+        , focusFollowsMouse  = myFocusFollowsMouse
+        , clickJustFocuses   = myClickJustFocuses
+        , borderWidth        = myBorderWidth
+        , modMask            = myModMask
+        , workspaces         = myClickableWorkspaces
+        , normalBorderColor  = myNormalBorderColor
+        , focusedBorderColor = myFocusedBorderColor
 
-    -- key bindings
-      , mouseBindings      = myMouseBindings
+      -- key bindings
+        , mouseBindings      = myMouseBindings
 
-    -- hooks, layouts
-      , layoutHook         = myLayoutHook
-      , manageHook         = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
-      , handleEventHook    = docksEventHook
-      , startupHook        = myStartupHook
-      , logHook = dynamicLogWithPP xmobarPP
-          { ppOutput = hPutStrLn xmproc
-          , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]" -- Current workspace in xmobar
-          , ppVisible = xmobarColor "#98be65" ""                -- Visible but not current workspace
-          , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""   -- Hidden workspaces in xmobar
-          , ppHiddenNoWindows = xmobarColor "#c792ea" ""        -- Hidden workspaces (no windows)
-          , ppTitle = xmobarColor "#b3afc2" "" . shorten 60     -- Title of active window in xmobar
-          , ppSep =  "<fc=#666666> <fn=2>|</fn> </fc>"          -- Separators in xmobar
-          , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
-          , ppExtras  = [windowCount]                           -- # of windows current workspace
-          , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
-          }
-  } `additionalKeysP` myKeys
+      -- hooks, layouts
+        , layoutHook         = myLayoutHook
+        , manageHook         = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
+        , handleEventHook    = handleEventHook def <+> fullscreenEventHook <+> docksEventHook
+        , startupHook        = myStartupHook
+        , logHook = dynamicLogWithPP xmobarPP
+            { ppOutput = hPutStrLn xmproc
+            , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]" -- Current workspace in xmobar
+            , ppVisible = xmobarColor "#98be65" ""                -- Visible but not current workspace
+            , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""   -- Hidden workspaces in xmobar
+            , ppHiddenNoWindows = xmobarColor "#c792ea" ""        -- Hidden workspaces (no windows)
+            , ppTitle = xmobarColor "#b3afc2" "" . shorten 60     -- Title of active window in xmobar
+            , ppSep =  "<fc=#666666> <fn=2>|</fn> </fc>"          -- Separators in xmobar
+            , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
+            , ppExtras  = [windowCount]                           -- # of windows current workspace
+            , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+            }
+    } `additionalKeysP` myKeys
+   
