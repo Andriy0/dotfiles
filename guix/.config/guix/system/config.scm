@@ -100,21 +100,21 @@ EndSection
 ")
 
 (operating-system
- ;; (kernel 
- ;;  (let*
- ;;      ((channels
- ;;        (list (channel
- ;;               (name 'nonguix)
- ;;               (url "https://gitlab.com/nonguix/nonguix")
- ;;               (commit "706d8af5b111d85902280f1154dc4fad683b5281"))
- ;;              (channel
- ;;               (name 'guix)
- ;;               (url "https://git.savannah.gnu.org/git/guix.git")
- ;;               (commit "bf9dc7568272e28b79dd1ae3610c3ac83cc216a6"))))
- ;;       (inferior
- ;;        (inferior-for-channels channels)))
- ;;    (first (lookup-inferior-packages inferior "linux" "5.12.13"))))
- (kernel linux)
+ (kernel 
+  (let*
+      ((channels
+        (list (channel
+               (name 'nonguix)
+               (url "https://gitlab.com/nonguix/nonguix")
+               (commit "bdad9592bb425647b5535a9758f27127f586bc28"))
+              (channel
+               (name 'guix)
+               (url "https://git.savannah.gnu.org/git/guix.git")
+               (commit "5bf675cdaf16cca96fd26d80a099f6043fe9d7f8"))))
+       (inferior
+        (inferior-for-channels channels)))
+    (first (lookup-inferior-packages inferior "linux" "5.13.6"))))
+ ;; (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
 
