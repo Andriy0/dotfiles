@@ -165,7 +165,7 @@
     "cb" '((lambda () (interactive) (find-file "~/dotfiles/desktop/Desktop.org")) :which-key "Desktop.org")
     "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
     "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
-    "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/Xmonad.org")) :which-key "Xmonad.org")))
+    "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/.xmonad/Xmonad.org")) :which-key "Xmonad.org")))
 
 (use-package evil
   :init

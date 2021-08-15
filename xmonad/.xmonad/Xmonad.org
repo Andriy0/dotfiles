@@ -1,5 +1,5 @@
 #+startup: overview
-#+title: Xmonad and Xmobar Configuration
+#+title: Xmonad Configuration
 #+property: header-args :haskell :tangle xmonad.hs
 
 * TABLE OF CONTENTS
@@ -8,6 +8,7 @@
 :END:
 :CONTENTS:
 - [[#table-of-contents][TABLE OF CONTENTS]]
+- [[#about][About]]
 - [[#imports][IMPORTS]]
 - [[#variables][VARIABLES]]
 - [[#scratchpads][SCRATCHPADS]]
@@ -18,6 +19,10 @@
 - [[#keybindings][KEYBINDINGS]]
 - [[#main][MAIN]]
 :END:
+
+* About
+This file contains configuration of my XMonad window manager.
+Hightly inspired by [[https://www.youtube.com/channel/UCVls1GmFKf6WlTraIb_IaJg][DistroTube]] YouTube channel and configs of other people.
 
 * IMPORTS
 

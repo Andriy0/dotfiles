@@ -1,6 +1,5 @@
 (specifications->manifest
  '(
-   
    ;; Settings Manager
    "xsettingsd"
    
@@ -17,5 +16,4 @@
    "guix-simplyblack-sddm-theme"
    
    "murrine"
-   
 ))

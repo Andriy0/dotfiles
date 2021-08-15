@@ -1,4 +1,4 @@
-   -- Base
+-- Base
 import XMonad
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
@@ -82,7 +82,7 @@ myTerminal :: String
 myTerminal = "alacritty"
 
 myBrowser :: String 
-myBrowser = "chromium"
+myBrowser = "firefox"
 
 myFocusFollowsMouse :: Bool
 myFocusFollowsMouse = True
@@ -123,6 +123,7 @@ myStartupHook = do
     spawnOnce "xset r rate 300 50"
     spawnOnce "xsetroot -cursor_name left_ptr"
     spawnOnce "~/.fehbg"
+    -- spawnOnce "nitrogen --restore"
     spawnOnce "xsettingsd"
     spawnOnce "picom"
     spawnOnce "nm-applet"
@@ -131,6 +132,8 @@ myStartupHook = do
     spawnOnce "dunst"
     spawnOnce "mpd"
     spawnOnce "mpDris2"
+    spawnOnce "redshift"
+    spawnOnce "xscreensaver -no-splash"
     setWMName "LG3D"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
@@ -281,6 +284,7 @@ myManageHook = composeAll
     , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
     ] <+> namedScratchpadManageHook myScratchPads
 
+-- START_KEYS
 myKeys :: [(String, X ())]
 myKeys = 
     -- Xmonad
@@ -367,7 +371,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
                                        >> windows W.shiftMaster)) -- mod-button3, Set the window to floating mode and resize by dragging
     ]
-
+-- END_KEYS
 
 main = do 
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobar.hs"
@@ -403,4 +407,3 @@ main = do
             , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
             }
     } `additionalKeysP` myKeys
-   

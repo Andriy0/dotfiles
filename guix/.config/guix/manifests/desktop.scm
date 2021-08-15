@@ -1,6 +1,5 @@
 (specifications->manifest
  '(
-   
    ;; Fonts
    "font-mononoki"
    "font-fira-mono"
@@ -18,33 +17,23 @@
    "gs-fonts"
    
    "fontmanager"
-   "fontconfig"
-   
-   "qutebrowser"
-   
-   "mpv"
+   "fontconfig""qutebrowser""mpv"
    "mpv-mpris"
    "youtube-dl"
    "mpd"
    "mpdris2"
    "ncmpcpp"
-   "playerctl"
-   
-   "gstreamer"
+   "playerctl""gstreamer"
    "gst-plugins-base"
    "gst-plugins-good"
    "gst-plugins-bad"
    "gst-plugins-ugly"
    "gst-libav"
    "intel-vaapi-driver"
-   "libva-utils"
-   
-   "feh"
+   "libva-utils"  "feh"
    "imv"
    "gimp"
-   "scrot"
-   
-   "picom"
+   "scrot""picom"
    "light"
    "brightnessctl"
    "nitrogen"
@@ -69,9 +58,6 @@
    "swaylock"
    "wl-clipboard"
    "mako"
-   "slurp"
-   "grim"
-   "swappy"
    "flameshot"
    "evince"
    "deluge"
@@ -88,19 +74,14 @@
    "ghc-xmonad-contrib"
    "ghc@8.6.5"
    "stalonetray"
-   "dunst"
-   "yad"
-   
-   "btrfs-progs"
+   "dunst""btrfs-progs"
    "htop"
    "curl"
    "wget"
    "openssh"
    "zip"
    "unzip"
-   "stow"
-   
-   "xev"
+   "stow""xev"
    "xprop"
    "xdotool"
    "xset"
@@ -114,10 +95,7 @@
    "xss-lock"
    "libinput"
    "xinput"
-   "xscreensaver"
-   
-   "fish"
+   "xscreensaver""fish"
    "python"
    "ncurses"
-   
 ))

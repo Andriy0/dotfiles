@@ -1,17 +1,50 @@
 #+startup: overview
-#+title: Emacs Desktop Environment
+#+title: Desktop Environment
 #+property: header-args :mkdirp yes
 
-This file contains configuration for my overall desktop environment.
+* Table Of Contents
+:PROPERTIES:
+:TOC:      :include all
+:END:
+:CONTENTS:
+- [[#table-of-contents][Table Of Contents]]
+- [[#about][About]]
+- [[#fonts-and-themes][Fonts and Themes]]
+- [[#window-management][Window Management]]
+  - [[#exwm-config][EXWM config]]
+    - [[#ivy-posframe][Ivy-posframe]]
+    - [[#helper-functions][Helper functions]]
+    - [[#init-hook][Init hook]]
+    - [[#configure-exwm-via-use-package][Configure exwm via use-package]]
+    - [[#start-server][Start server]]
+  - [[#desktop-key-bindings][Desktop Key Bindings]]
+  - [[#desktop-file][Desktop File]]
+  - [[#launcher-script][Launcher Script]]
+  - [[#polybar][Polybar]]
+- [[#applications][Applications]]
+  - [[#browsers][Browsers]]
+    - [[#qutebrowser][Qutebrowser]]
+  - [[#media-players][Media Players]]
+    - [[#mpv][mpv]]
+    - [[#mpd][mpd]]
+    - [[#mpv-and-mpd-packages][mpv and mpd packages]]
+    - [[#codecs-and-drivers][Codecs and Drivers]]
+  - [[#image-viewers-and-editors][Image Viewers and Editors]]
+  - [[#desktop-tools][Desktop Tools]]
+  - [[#system-tools][System Tools]]
+  - [[#xorg-tools][Xorg Tools]]
+  - [[#dev-tools][Dev tools]]
+- [[#guix-manifests][Guix Manifests]]
+:END:
+
+* About
+This file contains configuration for some =packages= I use, =manifestst= for GUIX package manager and =EXWM= config.
+Hightly inspired by [[https://www.youtube.com/channel/UCAiiOTio8Yu69c3XnR7nQBQ][System Crafters]] YouTube channel and configs of other people.
 
 * Fonts and Themes
-
 I use [[https://github.com/derat/xsettingsd][xsettingsd]] as a minimal settings daemon for Xorg applications.  It replaces similar daemons from desktop environments like GNOME and XFCE and enables me to use a simple configuration file like the following:
 
-*~/dotfiles/xsettingsd/.config/xsettingsd/xsettingsd.conf:*
-
 #+begin_src conf :tangle ~/dotfiles/xsettingsd/.config/xsettingsd/xsettingsd.conf :noweb yes
-  
   # Net/ThemeName "Matcha-dark-azul"
   # Net/ThemeName "numix"
   Net/ThemeName "Arc-Dark"
@@ -24,27 +57,20 @@ I use [[https://github.com/derat/xsettingsd][xsettingsd]] as a minimal settings 
   Xft/Antialias 1
   Xft/Hinting 0
   Xft/HintStyle "hintnone"
-  
 #+end_src
 
 I also have to do an extra step to make sure Emacs can find the font path from the "desktop" profile.
 
-*~/dotfiles/fontconfig/.config/fontconfig/fonts.conf:*
-
 #+begin_src xml :tangle ~/dotfiles/fontconfig/.config/fontconfig/fonts.conf
-  
   <?xml version="1.0"?>
   <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
   <fontconfig>
     <dir>~/.guix-extra-profiles/desktop/desktop/share/fonts</dir>
   </fontconfig>
-  
 #+end_src
 
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref themes :noweb-sep ""
-
   ;; Settings Manager
   "xsettingsd"
 
@@ -61,11 +87,9 @@ I also have to do an extra step to make sure Emacs can find the font path from t
   "guix-simplyblack-sddm-theme"
 
   "murrine"
-
 #+end_src
 
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-
   ;; Fonts
   "font-mononoki"
   "font-fira-mono"
@@ -84,11 +108,10 @@ I also have to do an extra step to make sure Emacs can find the font path from t
 
   "fontmanager"
   "fontconfig"
-
 #+end_src
+:END:
 
 * Window Management
-
 We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basis for our Emacs Desktop Environment. The [[https://github.com/ch11ng/exwm/wiki][EXWM Wiki]] is a great place to find tips about how to configure everything!
 
 *NOTE:* Make sure you’ve installed =nm-applet=, =pasystray= and =blueman= for the system tray apps to work!
@@ -97,7 +120,6 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 *** Ivy-posframe
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-  
   (use-package ivy-posframe
     :after ivy
     :custom
@@ -113,13 +135,11 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
        (right-fringe . 7)))
     :config 
     (ivy-posframe-mode 1))
-  
 #+end_src
 
 *** Helper functions
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-
   (defun efs/run-in-background (command)
     (let ((command-parts (split-string command "[ ]+")))
       (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
@@ -160,12 +180,10 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
     ;; ("Sol" (exwm-workspace-move-window 3))
     ("mpv" (exwm-floating-toggle-floating)
            (exwm-layout-toggle-mode-line))))
-           
 #+end_src
 *** Init hook
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-  
     (defun efs/exwm-init-hook ()
       ;; Make workspace 1 be the one where we land at startup
       (exwm-workspace-switch-create 1)
@@ -194,13 +212,11 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
       ;; (efs/run-in-background "pasystray")
       ;; (efs/run-in-background "nm-applet")
       )
-  
 #+end_src
 
 *** Configure exwm via use-package
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-	
 	(use-package exwm
 	  :config
 	  ;; Set the default number of workspaces
@@ -307,45 +323,35 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 	  (exwm-input-set-key (kbd "s-}") (efs/resize-helper enlarge-window))
 	
 	  (exwm-enable))
-	
 #+end_src
 
 *** Start server
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-  
   ;; (server-start)
-  
 #+end_src
 
 ** Desktop Key Bindings
-
 We use the [[https://github.com/DamienCassou/desktop-environment][desktop-environment]] package to automatically bind to well-known programs for controlling the volume, screen brightness, media playback, and doing other things like locking the screen and taking screenshots. Make sure that you install the necessary programs to make this functionality work! Check the [[https://github.com/DamienCassou/desktop-environment#default-configuration][default programs]] list to know what you need to install.
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-    
-    (use-package desktop-environment
-      :after exwm
-      :config (desktop-environment-mode)
-      :custom
-      (desktop-environment-brightness-small-increment "1%+")
-      (desktop-environment-brightness-small-decrement "1%-")
-      (desktop-environment-brightness-normal-increment "1%+")
-      (desktop-environment-brightness-normal-decrement "1%-")
-      (desktop-environment-screenshot-command "flameshot gui"))
-    
+  (use-package desktop-environment
+    :after exwm
+    :config (desktop-environment-mode)
+    :custom
+    (desktop-environment-brightness-small-increment "1%+")
+    (desktop-environment-brightness-small-decrement "1%-")
+    (desktop-environment-brightness-normal-increment "1%+")
+    (desktop-environment-brightness-normal-decrement "1%-")
+    (desktop-environment-screenshot-command "flameshot gui"))
 #+end_src
 
 ** Desktop File
-
 This file is used by your “login manager” (GDM, LightDM, etc) to display EXWM as a desktop environment option when you log in.
 
 Desktop entry content:
 
-*~/dotfiles/local/.local/share/xsessions/my-exwm.desktop*
-
 #+begin_src conf :tangle ~/dotfiles/local/.local/share/xsessions/my-exwm.desktop :noweb yes
-  
   [Desktop Entry]
   Name=MY-EXWM
   Comment=Emacs Window Manager
@@ -354,15 +360,12 @@ Desktop entry content:
   Type=Application
   # X-LightDM-DesktopName=exwm
   DesktopNames=my-exwm
-  
 #+end_src
 
 ** Launcher Script
-
 This launcher script is invoked by =my-exwm.desktop= to start Emacs and load our desktop environment configuration. We also start up some other helpful applications to configure the desktop experience.
 
 #+begin_src conf :tangle ~/dotfiles/emacs/.config/emacs/exwm/start-exwm.sh
-  
   # Set the screen DPI (uncomment this if needed!)
   # xrdb ~/.emacs.d/exwm/Xresources
   
@@ -387,21 +390,17 @@ This launcher script is invoked by =my-exwm.desktop= to start Emacs and load our
   xhost +SI:localuser:$USER
   exec dbus-launch --exit-with-session emacs-28.0.50 -mm -l ~/.config/emacs/desktop.el
   # exec dbus-launch --exit-with-session emacsclient --eval "(exwm-init)" -c -F '((fullscreen . fullboth))'
-  
 #+end_src
 
 Make it executable.
 
 #+begin_src shell
-
   chmod 755 ~/dotfiles/emacs/.config/emacs/exwm/start-exwm.sh
-
 #+end_src
 
 ** Polybar
 
 #+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
-  
   (defvar efs/polybar-process nil
     "Holds the process of the running Polybar instance, if any")
   
@@ -439,11 +438,9 @@ Make it executable.
 				 (mapconcat (lambda (i) (funcall exwm-workspace-index-map i))
 					    (number-sequence 0 (1- (exwm-workspace--count)))
 					    "\0"))))
-  
 #+end_src
 
 #+begin_src conf :tangle ~/dotfiles/polybar/.config/polybar/config :noweb yes
-  
   ; Docs: https://github.com/polybar/polybar
   ;==========================================================
   
@@ -627,28 +624,14 @@ Make it executable.
   label = %temperature-c%
   label-warn = %temperature-c%!
   label-warn-foreground = ${colors.secondary}
-  
 #+end_src
 
 * Applications
 ** Browsers
-
-*Guix Packages*
-
-#+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
-  "qutebrowser"
-  
-#+end_src
-
 *** Qutebrowser
-
 [[https://github.com/qutebrowser/qutebrowser][Qutebrowser]] is a great keyboard-centric browser which uses the Chromium rendering engine via QT 5's WebEngine component.  I've configured it to act more like Vimb for window-per-tab behavior that integrates well into Emacs.  One thing I like about this browser is that it does a much better job of remembering what windows you had open when it exits so that you can maintain your session more easily.  I also like that when you reopen a tab/window, the history of that window is still present.
 
-*~/.config/qutebrowser/config.py*
-
 #+begin_src python :tangle ~/dotfiles/qutebrowser/.config/qutebrowser/config.py :noweb yes
-
   # Load settings configured via GUI
   config.load_autoconfig()
 
@@ -685,18 +668,19 @@ Make it executable.
 
   # Some other bindings
   config.bind(',m', 'hint links spawn mpv {hint-url}')
-
 #+end_src
+
+:GUIX-PACKAGES:
+#+begin_src scheme :noweb-ref packages :noweb-sep ""
+  "qutebrowser"
+#+end_src
+:END:
 
 ** Media Players
 *** mpv
-
 [[https://mpv.io/][mpv]] is a simple yet powerful video player.  Paired with [[http://ytdl-org.github.io/youtube-dl/][youtube-dl]] it can even stream YouTube videos.  [[https://github.com/hoyon/mpv-mpris][mpv-mpris]] allows playback control via [[https://github.com/altdesktop/playerctl][playerctl]].
 
-*~/.config/mpv/mpv.conf*
-
 #+begin_src conf :tangle ~/dotfiles/mpv/.config/mpv/mpv.conf :noweb yes
-  
   # Configure playback quality
   # vo=gpu
   # hwdec=vaapi
@@ -722,17 +706,12 @@ Make it executable.
   
   # Keep the player open after the file finishes
   keep-open
-  
 #+end_src
 
 *** mpd
-
 [[https://github.com/MusicPlayerDaemon/MPD][Music Player Daemon]] (MPD) is a flexible, powerful, server-side application for playing music. Through plugins and libraries it can play a variety of sound files while being controlled by its network protocol.
 
-*~/.config/mpd/mpd.conf*
-
 #+begin_src conf :tangle ~/dotfiles/mpd/.config/mpd/mpd.conf :noweb yes
-  
   # Recommended location for database
   db_file            "~/.local/mpd/database"
   
@@ -760,15 +739,11 @@ Make it executable.
   #     name "My Alsa Device"
   #     mixer_type "software"
   # }
-  
 #+end_src
 
 *** mpv and mpd packages
-
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "mpv"
   "mpv-mpris"
   "youtube-dl"
@@ -776,17 +751,14 @@ Make it executable.
   "mpdris2"
   "ncmpcpp"
   "playerctl"
-  
 #+end_src
+:END:
 
 *** Codecs and Drivers
-
 These packages are needed to enable many video formats to be played in browsers and video players.  VAAPI drivers are also used to enable hardware-accelerated video decoding.
 
-*Guix Packages*
-
-#+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
+:GUIX-PACKAGES:
+#+begin_src scheme :noweb-ref packages :noweb-sep ""  
   "gstreamer"
   "gst-plugins-base"
   "gst-plugins-good"
@@ -794,42 +766,34 @@ These packages are needed to enable many video formats to be played in browsers 
   "gst-plugins-ugly"
   "gst-libav"
   "intel-vaapi-driver"
-  "libva-utils"
-  
+  "libva-utils"  
 #+end_src
+:END:
 
 ** Image Viewers and Editors
-
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "feh"
   "imv"
   "gimp"
   "scrot"
-  
 #+end_src
+:END:
 
 ** Desktop Tools
-
 [[https://github.com/jonls/redshift][Redshift]] adjusts the color temperature of your screen according to your surroundings. This may help your eyes hurt less if you are working in front of the screen at night.
 
 #+begin_src conf :tangle ~/dotfiles/redshift/.config/redshift/redshift.conf :noweb ye
-  
   [redshift]
   location-provider=manual
   
   [manual]
   lat=48.862831
   lon=25.003870
-  
 #+end_src
 
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "picom"
   "light"
   "brightnessctl"
@@ -872,15 +836,12 @@ These packages are needed to enable many video formats to be played in browsers 
   "ghc@8.6.5"
   "stalonetray"
   "dunst"
-  
 #+end_src
+:END:
 
 ** System Tools
-
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "btrfs-progs"
   "htop"
   "curl"
@@ -889,15 +850,12 @@ These packages are needed to enable many video formats to be played in browsers 
   "zip"
   "unzip"
   "stow"
-  
 #+end_src
+:END:
 
 ** Xorg Tools
-
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "xev"
   "xprop"
   "xdotool"
@@ -913,39 +871,31 @@ These packages are needed to enable many video formats to be played in browsers 
   "libinput"
   "xinput"
   "xscreensaver"
-  
 #+end_src
+:END:
 
 ** Dev tools
-
-*Guix Packages*
-
+:GUIX-PACKAGES:
 #+begin_src scheme :noweb-ref packages :noweb-sep ""
-  
   "fish"
   "python"
   "ncurses"
-  
 #+end_src
+:END:
 
-* Desktop Profile
-
+* Guix Manifests
 The =desktop.scm= manifest holds the list of packages that I use to configure my desktop environment.  The package names are pulled from the relevant sections titled *Guix Packages* in this file (=Desktop.org=).
 
 #+begin_src scheme :tangle ~/dotfiles/guix/.config/guix/manifests/themes.scm :noweb yes
-
 (specifications->manifest
  '(
    <<themes>>
 ))
-
 #+end_src
 
 #+begin_src scheme :tangle ~/dotfiles/guix/.config/guix/manifests/desktop.scm :noweb yes
-
 (specifications->manifest
  '(
    <<packages>>
 ))
-
 #+end_src

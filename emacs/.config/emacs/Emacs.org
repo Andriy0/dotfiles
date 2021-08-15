@@ -1,5 +1,5 @@
 #+startup: overview
-#+title: Emacs From Scratch Configuration
+#+title: Emacs Configuration
 #+property: header-args :emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/init.el :mkdirp yes
 
 * Table Of Contents
@@ -8,6 +8,7 @@
 :END:
 :CONTENTS:
 - [[#table-of-contents][Table Of Contents]]
+- [[#about][About]]
 - [[#basic-configuration][Basic Configuration]]
 - [[#optimizations][Optimizations]]
   - [[#garbage-collection][Garbage Collection]]
@@ -72,6 +73,10 @@
   - [[#emacs-guix][Emacs-guix]]
 - [[#guix-manifest][Guix Manifest]]
 :END:
+
+* About
+This file contains configuration of my GNU Emacs.
+Hightly inspired by [[https://www.youtube.com/channel/UCAiiOTio8Yu69c3XnR7nQBQ][System Crafters]] YouTube channel and configs of other people.
 
 * Basic Configuration
 This section configures basic UI settings that remove unneeded elements to make Emacs look more minimal, disables and enables some small features.
@@ -271,7 +276,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
       "cb" '((lambda () (interactive) (find-file "~/dotfiles/desktop/Desktop.org")) :which-key "Desktop.org")
       "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
       "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
-      "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/Xmonad.org")) :which-key "Xmonad.org")))
+      "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/.xmonad/Xmonad.org")) :which-key "Xmonad.org")))
 
   (use-package evil
     :init
