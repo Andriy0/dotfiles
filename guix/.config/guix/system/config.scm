@@ -63,10 +63,12 @@
 				       (substitute-urls (append
 							 %default-substitute-urls
 							 ;; (list "https://guix.rohleder.de")
+							 (list "http://substitutes.guix.sama.re")
 							 (list "https://mirror.brielmaier.net")))
 				       (authorized-keys (append
 							 %default-authorized-guix-keys
 							 ;; (list (local-file "guix.rohdeler.de.pub"))
+							 (list (local-file "substitutes.guix.sama.re.pub"))
 							 (list (local-file "mirror.brielmaier.net.pub"))))))
 		   
 		   (network-manager-service-type config =>
@@ -100,21 +102,21 @@ EndSection
 ")
 
 (operating-system
- (kernel 
-  (let*
-      ((channels
-        (list (channel
-               (name 'nonguix)
-               (url "https://gitlab.com/nonguix/nonguix")
-               (commit "bdad9592bb425647b5535a9758f27127f586bc28"))
-              (channel
-               (name 'guix)
-               (url "https://git.savannah.gnu.org/git/guix.git")
-               (commit "5bf675cdaf16cca96fd26d80a099f6043fe9d7f8"))))
-       (inferior
-        (inferior-for-channels channels)))
-    (first (lookup-inferior-packages inferior "linux" "5.13.6"))))
- ;; (kernel linux)
+ ;; (kernel 
+ ;;  (let*
+ ;;      ((channels
+ ;;        (list (channel
+ ;;               (name 'nonguix)
+ ;;               (url "https://gitlab.com/nonguix/nonguix")
+ ;;               (commit "f69a09d7c52c8ab01069272bbc11ce517f434ced"))
+ ;;              (channel
+ ;;               (name 'guix)
+ ;;               (url "https://git.savannah.gnu.org/git/guix.git")
+ ;;               (commit "30289f4d4638452520f52c1a36240220d0d940ff"))))
+ ;;       (inferior
+ ;;        (inferior-for-channels channels)))
+ ;;    (first (lookup-inferior-packages inferior "linux" "5.13.8"))))
+ (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
 
