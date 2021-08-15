@@ -69,6 +69,9 @@
    "swaylock"
    "wl-clipboard"
    "mako"
+   "slurp"
+   "grim"
+   "swappy"
    "flameshot"
    "evince"
    "deluge"
@@ -86,6 +89,7 @@
    "ghc@8.6.5"
    "stalonetray"
    "dunst"
+   "yad"
    
    "btrfs-progs"
    "htop"

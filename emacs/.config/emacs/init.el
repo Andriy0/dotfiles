@@ -174,49 +174,68 @@ gc-cons-threshold)))
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(use-package general
-  :config
-  (general-create-definer efs/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
+;; General
+(straight-use-package 'general)
+(with-eval-after-load 'evil
+  (require 'general)
+  (general-create-definer efs/leader-keys :keymaps
+    '(normal insert visual emacs)
+    :prefix "SPC" :global-prefix "C-SPC")
+  (efs/leader-keys "t"
+    '(:ignore t :which-key "toggles")
+    "tt"
+    '(counsel-load-theme :which-key "choose theme")
+    "c"
+    '(:ignore t :which-key "configs")
+    "ca"
+    '((lambda nil
+        (interactive)
+        (find-file "~/dotfiles/org-files/org-files/Emacs.org"))
+      :which-key "Emacs.org")
+    "cb"
+    '((lambda nil
+        (interactive)
+        (find-file "~/dotfiles/org-files/org-files/Desktop.org"))
+      :which-key "Desktop.org")
+    "cc"
+    '((lambda nil
+        (interactive)
+        (find-file "~/dotfiles/guix/.config/guix/system/config.scm"))
+      :which-key "config.scm")
+    "cd"
+    '((lambda nil
+        (interactive)
+        (find-file "~/dotfiles/awesome/.config/awesome/rc.lua"))
+      :which-key "rc.lua")))
 
-  (efs/leader-keys
-    "t"  '(:ignore t :which-key "toggles")
-    "tt" '(counsel-load-theme :which-key "choose theme")
-    "c" '(:ignore t :which-key "configs")
-    "ca" '((lambda () (interactive) (find-file "~/dotfiles/org-files/org-files/Emacs.org")) :which-key "Emacs.org")
-    "cb" '((lambda () (interactive) (find-file "~/dotfiles/org-files/org-files/Desktop.org")) :which-key "Desktop.org")
-    "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
-    "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")))
+;; Evil
+(straight-use-package 'evil)
+(setq evil-want-integration t)
+(setq evil-want-keybinding nil)
+(setq evil-want-C-u-scroll t)
+(setq evil-want-C-i-jump nil)
+(require 'evil)
+(evil-mode 1)
+(define-key evil-insert-state-map
+  (kbd "C-g")
+  'evil-normal-state)
+(define-key evil-insert-state-map
+  (kbd "C-h")
+  'evil-delete-backward-char-and-join)
+(define-key evil-normal-state-map
+  (kbd "C-r")
+  'undo-tree-redo)
+(evil-set-initial-state 'messages-buffer-mode 'normal)
+(evil-set-initial-state 'dashboard-mode 'normal)
 
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-
-  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-
-  ;; Use visual line motions even outside of visual-line-mode buffers
-  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-(use-package evil-collection
-  :after evil
-  :config
+(straight-use-package 'evil-collection)
+(with-eval-after-load 'evil
+  (require 'evil-collection)
   (evil-collection-init))
 
-(use-package undo-tree
-  :after evil
-  :config
+(straight-use-package 'undo-tree)
+(with-eval-after-load 'evil
+  (require 'undo-tree)
   (global-undo-tree-mode 1))
 
 "emacs-general"
@@ -442,6 +461,7 @@ gc-cons-threshold)))
 
 (defun efs/org-mode-setup ()
   (org-indent-mode 1)
+  (electric-indent-local-mode -1)
   (variable-pitch-mode 1)
   (visual-line-mode 0))
 
@@ -474,11 +494,16 @@ gc-cons-threshold)))
 
 "emacs-visual-fill-column"
 
+(straight-use-package 'org-make-toc)
+(with-eval-after-load 'org
+  (require 'org-make-toc))
+
 (with-eval-after-load 'org
   (org-babel-do-load-languages
     'org-babel-load-languages
     '((emacs-lisp . t)
       (lua . t)
+      (haskell . t)
       (python . t)))
 
   (push '("conf-unix" . conf-unix) org-src-lang-modes))
@@ -489,6 +514,7 @@ gc-cons-threshold)))
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
     (add-to-list 'org-structure-template-alist '("xm" . "src xml"))
     (add-to-list 'org-structure-template-alist '("co" . "src conf"))
     (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
