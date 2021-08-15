@@ -20,7 +20,7 @@
 - [[#main][MAIN]]
 :END:
 
-* About
+* ABOUT
 This file contains configuration of my XMonad window manager.
 Hightly inspired by [[https://www.youtube.com/channel/UCVls1GmFKf6WlTraIb_IaJg][DistroTube]] YouTube channel and configs of other people.
 
