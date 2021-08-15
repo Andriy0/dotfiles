@@ -63,24 +63,22 @@
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
 (add-hook 'emacs-startup-hook
-(lambda ()
-(message "Emacs ready in %s with %d garbage collections."
-(format "%.2f seconds"
-(float-time
-(time-subtract after-init-time before-init-time)))
-gcs-done)))
+          (lambda ()
+            (message "Emacs ready in %s with %d garbage collections."
+                     (format "%.2f seconds"
+                             (float-time
+                              (time-subtract after-init-time before-init-time)))
+                     gcs-done)))
 
 ;; Return gc-threshold to normal value
 (run-with-idle-timer
-5 nil
-(lambda ()
-(setq gc-cons-threshold (* 2 1000 1000))
-(message "gc-cons-threshold restored to %s"
-gc-cons-threshold)))
+ 5 nil
+ (lambda ()
+   (setq gc-cons-threshold (* 2 1000 1000))
+   (message "gc-cons-threshold restored to %s"
+            gc-cons-threshold)))
 
 ;; (use-package esup)
-
-"emacs-esup"
 
 (eval-after-load 'ivy-rich
   (progn
@@ -109,26 +107,6 @@ gc-cons-threshold)))
     (advice-add 'ivy-rich--ivy-switch-buffer-transformer :around 'ek/ivy-rich-cache-lookup)
     (advice-add 'ivy-switch-buffer :after 'ek/ivy-rich-cache-rebuild-trigger)))
 
-;; Initialize package sources
-;; (require 'package)
-
-;; (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-;;                          ("org" . "https://orgmode.org/elpa/")
-;;                          ("elpa" . "https://elpa.gnu.org/packages/")))
-
-;; (package-initialize)
-;; (unless package-archive-contents
-;;   (package-refresh-contents))
-
-;;   Initialize use-package on non-Linux platforms
-;; (unless (package-installed-p 'use-package)
-;;   (package-install 'use-package))
-
-;; (require 'use-package)
-;; (setq use-package-always-ensure nil)
-;; (setq use-package-verbose nil)
-;; (setq use-package-always-defer nil)
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
@@ -146,8 +124,6 @@ gc-cons-threshold)))
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 ;; (setq straight-check-for-modifications '(check-on-save find-when-checking))
-
-"emacs-use-package"
 
 (if (equal (system-name) "guixsd")
   (setq my-fixed-font-name "mononoki")
@@ -174,83 +150,58 @@ gc-cons-threshold)))
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-;; General
-(straight-use-package 'general)
-(with-eval-after-load 'evil
-  (require 'general)
-  (general-create-definer efs/leader-keys :keymaps
-    '(normal insert visual emacs)
-    :prefix "SPC" :global-prefix "C-SPC")
-  (efs/leader-keys "t"
-    '(:ignore t :which-key "toggles")
-    "tt"
-    '(counsel-load-theme :which-key "choose theme")
-    "c"
-    '(:ignore t :which-key "configs")
-    "ca"
-    '((lambda nil
-        (interactive)
-        (find-file "~/dotfiles/org-files/org-files/Emacs.org"))
-      :which-key "Emacs.org")
-    "cb"
-    '((lambda nil
-        (interactive)
-        (find-file "~/dotfiles/org-files/org-files/Desktop.org"))
-      :which-key "Desktop.org")
-    "cc"
-    '((lambda nil
-        (interactive)
-        (find-file "~/dotfiles/guix/.config/guix/system/config.scm"))
-      :which-key "config.scm")
-    "cd"
-    '((lambda nil
-        (interactive)
-        (find-file "~/dotfiles/awesome/.config/awesome/rc.lua"))
-      :which-key "rc.lua")))
+(use-package general
+  :config
+  (general-create-definer efs/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
 
-;; Evil
-(straight-use-package 'evil)
-(setq evil-want-integration t)
-(setq evil-want-keybinding nil)
-(setq evil-want-C-u-scroll t)
-(setq evil-want-C-i-jump nil)
-(require 'evil)
-(evil-mode 1)
-(define-key evil-insert-state-map
-  (kbd "C-g")
-  'evil-normal-state)
-(define-key evil-insert-state-map
-  (kbd "C-h")
-  'evil-delete-backward-char-and-join)
-(define-key evil-normal-state-map
-  (kbd "C-r")
-  'undo-tree-redo)
-(evil-set-initial-state 'messages-buffer-mode 'normal)
-(evil-set-initial-state 'dashboard-mode 'normal)
+  (efs/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")
+    "c" '(:ignore t :which-key "configs")
+    "ca" '((lambda () (interactive) (find-file "~/dotfiles/emacs/.config/emacs/Emacs.org")) :which-key "Emacs.org")
+    "cb" '((lambda () (interactive) (find-file "~/dotfiles/desktop/Desktop.org")) :which-key "Desktop.org")
+    "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
+    "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
+    "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/Xmonad.org")) :which-key "Xmonad.org")))
 
-(straight-use-package 'evil-collection)
-(with-eval-after-load 'evil
-  (require 'evil-collection)
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+(use-package evil-collection
+  :after evil
+  :config
   (evil-collection-init))
 
-(straight-use-package 'undo-tree)
-(with-eval-after-load 'evil
-  (require 'undo-tree)
+(use-package undo-tree
+  :after evil
+  :config
   (global-undo-tree-mode 1))
 
-"emacs-general"
-"emacs-evil"
-"emacs-evil-collection"
-"emacs-undo-tree"
-
-;; (use-package command-log-mode
-;;   :commands command-log-mode)
+(use-package command-log-mode
+  :commands command-log-mode)
 
 (use-package modus-themes)
 
 (use-package doom-themes)
-
-"emacs-modus-themes"
 
 ;; Color theme
 ;; (if (equal (system-name) "void")
@@ -264,9 +215,6 @@ gc-cons-threshold)))
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
 
-"emacs-all-the-icons"
-"emacs-doom-modeline"
-
 (use-package which-key
   :after evil
   ;; :init (which-key-mode)
@@ -275,13 +223,11 @@ gc-cons-threshold)))
   (which-key-idle-delay 1)
   :config
   (which-key-mode))
-  
+
 ;; (use-package which-key-posframe
 ;;   :load-path "~/.config/emacs/elpa/which-key-posframe-20190427.1103/which-key-posframe.el"
 ;;   :config
 ;;   (which-key-posframe-mode))
-
-"emacs-which-key"
 
 (use-package savehist
   :init
@@ -318,11 +264,6 @@ gc-cons-threshold)))
    ("C-r" . consult-history))
   :custom
   (completion-in-region-function #'consult-completion-in-region))
-
-"emacs-vertico"
-"emacs-consult"
-"emacs-prescient"
-"emacs-marginalia"
 
 (use-package helm
   :disabled
@@ -397,8 +338,6 @@ gc-cons-threshold)))
 
 (use-package diminish)
 
-"emacs-diminish"
-
 (use-package helpful
   :custom
   (counsel-describe-function-function #'helpful-callable)
@@ -408,8 +347,6 @@ gc-cons-threshold)))
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
-
-"emacs-helpful"
 
 (use-package hydra
   :defer t)
@@ -422,8 +359,6 @@ gc-cons-threshold)))
 
 (efs/leader-keys
   "ts" '(hydra-text-scale/body :which-key "scale text"))
-
-"emacs-hydra"
 
 (use-package smooth-scrolling
   :defer t
@@ -461,7 +396,6 @@ gc-cons-threshold)))
 
 (defun efs/org-mode-setup ()
   (org-indent-mode 1)
-  (electric-indent-local-mode -1)
   (variable-pitch-mode 1)
   (visual-line-mode 0))
 
@@ -492,8 +426,6 @@ gc-cons-threshold)))
   ;; :disabled
   :hook (org-mode . efs/org-mode-visual-fill))
 
-"emacs-visual-fill-column"
-
 (straight-use-package 'org-make-toc)
 (with-eval-after-load 'org
   (require 'org-make-toc))
@@ -514,10 +446,10 @@ gc-cons-threshold)))
     (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("py" . "src python"))
-    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
     (add-to-list 'org-structure-template-alist '("xm" . "src xml"))
     (add-to-list 'org-structure-template-alist '("co" . "src conf"))
     (add-to-list 'org-structure-template-alist '("lu" . "src lua"))
+    (add-to-list 'org-structure-template-alist '("hs" . "src haskell"))
     (add-to-list 'org-structure-template-alist '("sc" . "src scheme")))
 
 ;; Automatically tangle our Emacs.org config file when we save it
@@ -545,9 +477,6 @@ gc-cons-threshold)))
 ;;   :config
 ;;   (lsp-enable-which-key-integration t))
 
-"emacs-lsp-mode"
-;; "emacs-flycheck"
-
 ;; (use-package lsp-ui
 ;;   :hook (lsp-mode . lsp-ui-mode)
 ;;   :custom
@@ -559,12 +488,10 @@ gc-cons-threshold)))
 ;; (use-package lsp-ivy
 ;;   :after lsp-mode)
 
-"emacs-lsp-ivy"
-
 (use-package nix-mode
   :mode "//.nix//'"
   :hook (nix-mode ;; . lsp-deferred
-		  ))
+         ))
 
 (use-package lua-mode
   ;; :disabled
@@ -572,17 +499,11 @@ gc-cons-threshold)))
   ;; :hook (lua-mode ;; . lsp-deferred)
   )
 
-"emacs-lua-mode"
-"emacs-lsp-lua-emmy"
-
 (use-package haskell-mode
   ;; :disabled
   :mode "//.hs'"
   ;; :hook (haskell-mode ;; . lsp-deferred)
   )
-
-"emacs-lua-mode"
-"emacs-lsp-lua-emmy"
 
 (use-package geiser
   :commands geiser
@@ -591,9 +512,6 @@ gc-cons-threshold)))
 
 (use-package geiser-guile
   :after geiser)
-
-"emacs-geiser"
-"emacs-geiser-guile"
 
 ;; (if (equal (system-name) "guixsd")
 ;;     (use-package slime
@@ -606,19 +524,10 @@ gc-cons-threshold)))
 ;;     :config
 ;;     (setq lisp-inferior-program "sbcl --noinform --no-linedit")))
 
-  (use-package slime
-    :commands slime
-    :config
-    (setq inferior-lisp-program "sbcl --noinform --no-linedit"))
-
-"emacs-slime"
-
-"ccls"
-"emacs-ccls"
-"clang-toolchain"
-"gcc-toolchain"
-"make"
-"emacs-yasnippet-snippets"
+(use-package slime
+  :commands slime
+  :config
+  (setq inferior-lisp-program "sbcl --noinform --no-linedit"))
 
 (use-package eglot
   :defer t)
@@ -642,12 +551,6 @@ gc-cons-threshold)))
 ;; (use-package company-box
   ;; :hook (company-mode . company-box-mode))
 
-"emacs-company"
-"emacs-company-box"
-"emacs-company-lsp"
-"emacs-company-coq"
-"emacs-slime-company"
-
 ;; Collection of snippets
 (use-package yasnippet-snippets
   :defer t)
@@ -670,12 +573,8 @@ gc-cons-threshold)))
 (use-package evil-nerd-commenter
   :bind ("M-/" . evilnc-comment-or-uncomment-lines))
 
-"emacs-evil-nerd-commenter"
-
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
-
-"emacs-rainbow-delimiters"
 
 ;; (use-package parinfer
 ;;   :bind
@@ -695,8 +594,6 @@ gc-cons-threshold)))
 ;;     (add-hook 'common-lisp-mode-hook #'parinfer-mode)
 ;;     (add-hook 'scheme-mode-hook #'parinfer-mode)
 ;;     (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
-"emacs-parinfer-mode"
 
 (use-package term
   :commands term
@@ -752,8 +649,6 @@ gc-cons-threshold)))
   ;; (use-package vterm
   ;;   :commands vterm)
 
-"emacs-vterm"
-
 (use-package dired
   ;; :ensure nil
   :straight nil
@@ -789,16 +684,8 @@ gc-cons-threshold)))
                            ("pptx" . "libreoffice")
                            ("pdf" . "evince"))))
 
-"emacs-diredfl"
-"emacs-dired-hacks"
-"emacs-all-the-icons-dired"
-
 (use-package bluetooth
   :commands bluetooth-list-devices)
 
-"emacs-bluetooth"
-
 (use-package guix
   :defer t)
-
-"emacs-guix"
