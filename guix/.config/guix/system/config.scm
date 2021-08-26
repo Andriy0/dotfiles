@@ -108,14 +108,14 @@ EndSection
  ;;        (list (channel
  ;;               (name 'nonguix)
  ;;               (url "https://gitlab.com/nonguix/nonguix")
- ;;               (commit "f69a09d7c52c8ab01069272bbc11ce517f434ced"))
+ ;;               (commit "967838c40d9d4a04254b9e496b356a8a7b5015ae"))
  ;;              (channel
  ;;               (name 'guix)
  ;;               (url "https://git.savannah.gnu.org/git/guix.git")
- ;;               (commit "30289f4d4638452520f52c1a36240220d0d940ff"))))
+ ;;               (commit "a0fd46304e42f1df711b001a7159160c8e26d21d"))))
  ;;       (inferior
  ;;        (inferior-for-channels channels)))
- ;;    (first (lookup-inferior-packages inferior "linux" "5.13.8"))))
+ ;;    (first (lookup-inferior-packages inferior "linux" "5.13.10"))))
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))

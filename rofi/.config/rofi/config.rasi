@@ -1,5 +1,6 @@
 configuration {
-	// theme: "/home/andriy/.guix-profile/share/rofi/themes/arc-red-dark.rasi";
-	theme: "~/.config/rofi/themes/ark-red-dark.rasi";
+    modi: "window,drun,ssh,combi";
+    theme: "Arc-Dark";
+    show-icons: true;
+    combi-modi: "window,drun,ssh";
 }
-@import "/home/andriy/.guix-profile/share/rofi/themes/Arc-Dark.rasi"

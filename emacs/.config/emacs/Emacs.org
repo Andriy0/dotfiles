@@ -591,6 +591,7 @@ This section contains the basic configuration for =org-mode=.
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
     (org-indent-mode 1)
+    (electric-indent-local-mode -1)
     (variable-pitch-mode 1)
     (visual-line-mode 0))
   
@@ -1109,16 +1110,17 @@ A manifest for guix package manager, used to install some packages.
   (specifications->manifest
    '(
      "emacs-next"
-     "emacs-vterm"
+     ;; "emacs-vterm"
+     "libtool" ; required to compile vterm
+     "libvterm"
+     "python-language-server"
      "sbcl"
      "ccls"
      "gcc-toolchain"
      "clang-toolchain"
      "make"
-     "libtool" ; required to compile vterm
-     "libvterm"
-     "perl"
      "cmake"
+     "perl"
      "ripgrep"
   ))
 #+end_src

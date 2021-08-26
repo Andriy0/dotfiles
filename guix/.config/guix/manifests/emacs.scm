@@ -1,15 +1,16 @@
 (specifications->manifest
  '(
    "emacs-next"
-   "emacs-vterm"
+   ;; "emacs-vterm"
+   "libtool" ; required to compile vterm
+   "libvterm"
+   "python-language-server"
    "sbcl"
    "ccls"
    "gcc-toolchain"
    "clang-toolchain"
    "make"
-   "libtool" ; required to compile vterm
-   "libvterm"
-   "perl"
    "cmake"
+   "perl"
    "ripgrep"
 ))

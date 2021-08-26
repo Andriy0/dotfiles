@@ -28,10 +28,11 @@ import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, s
 import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, doCenterFloat, doRectFloat)
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.ServerMode
 
     -- Layouts
 import XMonad.Layout.GridVariants (Grid(Grid))
@@ -114,18 +115,18 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
     manageTerm = customFloating $ W.RationalRect l t w h
                where
                  h = 0.5
-                 w = 0.4
-                 t = 0.55 -h
-                 l = 0.45 -w
+                 w = 0.5
+                 t = 0.25
+                 l = 0.25
 
 myStartupHook :: X ()
 myStartupHook = do
     spawnOnce "xset r rate 300 50"
     spawnOnce "xsetroot -cursor_name left_ptr"
-    spawnOnce "~/.fehbg"
-    -- spawnOnce "nitrogen --restore"
+    -- spawnOnce "~/.fehbg"
+    spawnOnce "nitrogen --restore"
     spawnOnce "xsettingsd"
-    spawnOnce "picom"
+    spawnOnce "picom --experimental-backends"
     spawnOnce "nm-applet"
     spawnOnce "pasystray"
     spawnOnce "stalonetray --geometry=-500+0 --background=#282c34"
@@ -133,7 +134,7 @@ myStartupHook = do
     spawnOnce "mpd"
     spawnOnce "mpDris2"
     spawnOnce "redshift"
-    spawnOnce "xscreensaver -no-splash"
+    -- spawnOnce "xscreensaver -no-splash"
     setWMName "LG3D"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
@@ -278,11 +279,44 @@ myManageHook = composeAll
     , className =? "Kvantum Manager" --> doFloat
     , className =? "Ristretto" --> doFloat
     , className =? "Qalculate-gtk" --> doFloat
+    , className =? "Yad" --> doRectFloat (W.RationalRect 0.25 0.25 0.5 0.5)
     , resource =? "float_term" --> doFloat
     , resource =? "desktop_window" --> doIgnore
     , resource =? "kdesktop" --> doIgnore 
     , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
+    , className =? "jetbrains-studio" --> doFloat
+    , title =? "Emulator" --> doFloat
     ] <+> namedScratchpadManageHook myScratchPads
+
+------------------------------------------------------------------------
+-- External commands
+myCommands :: [(String, X ())]
+myCommands =
+        [ ("decrease-master-size"      , sendMessage Shrink                               )
+        , ("increase-master-size"      , sendMessage Expand                               )
+        , ("decrease-master-count"     , sendMessage $ IncMasterN (-1)                    )
+        , ("increase-master-count"     , sendMessage $ IncMasterN ( 1)                    )
+        , ("focus-prev"                , windows W.focusUp                                )
+        , ("focus-next"                , windows W.focusDown                              )
+        , ("focus-master"              , windows W.focusMaster                            )
+        , ("swap-with-prev"            , windows W.swapUp                                 )
+        , ("swap-with-next"            , windows W.swapDown                               )
+        , ("swap-with-master"          , windows W.swapMaster                             )
+        , ("toggle-noborder-full"      , sendMessage (MT.Toggle NBFULL) >>
+                                         sendMessage ToggleStruts                         )
+        , ("kill-window"               , kill                                             )
+        , ("quit"                      , io exitSuccess                                   )
+        , ("restart"                   , spawn "xmonad --recompile; xmonad --restart"     )
+        ]
+
+-----------------------------------------------------------------------
+-- Custom server mode
+myServerModeEventHook = serverModeEventHookCmd' $ return myCommands'
+myCommands' = ("list-commands", listMyServerCmds) : myCommands
+
+listMyServerCmds :: X ()
+listMyServerCmds = spawn ("echo '" ++ asmc ++ "' | yad --text-info")
+    where asmc = concat $ "Available commands:\n" : map (\(x, _)-> "  " ++ x ++ "\n") myCommands'
 
 -- START_KEYS
 myKeys :: [(String, X ())]
@@ -312,7 +346,7 @@ myKeys =
         , ("M-<Return>", spawn myTerminal)
         -- , ("M-S-<Return>", spawn $ myTerminal ++ " --class float_term")
         -- , ("M-p", spawn "dmenu_run -fn 'Mononoki Nerd Font Bold Mono-13'") -- launch dmenu
-        , ("M-d", spawn "rofi -show run")
+        , ("M-p", spawn "rofi -show combi -modi combi")
         -- , ("M-x", spawn "betterlockscreen -l dimblur") -- lock screen
         , ("M-x", spawn "slock") -- lock screen
         , ("M-s", spawn "flameshot gui") -- flameshot
@@ -392,7 +426,7 @@ main = do
       -- hooks, layouts
         , layoutHook         = myLayoutHook
         , manageHook         = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
-        , handleEventHook    = handleEventHook def <+> fullscreenEventHook <+> docksEventHook
+        , handleEventHook    = docksEventHook <+> fullscreenEventHook <+> myServerModeEventHook
         , startupHook        = myStartupHook
         , logHook = dynamicLogWithPP xmobarPP
             { ppOutput = hPutStrLn xmproc

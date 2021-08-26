@@ -396,6 +396,7 @@
 
 (defun efs/org-mode-setup ()
   (org-indent-mode 1)
+  (electric-indent-local-mode -1)
   (variable-pitch-mode 1)
   (visual-line-mode 0))
 

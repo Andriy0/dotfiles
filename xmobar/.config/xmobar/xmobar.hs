@@ -17,7 +17,7 @@ Config { -- font    = "xft:Ubuntu:weight=bold:pixelsize=14:antialias=true:hintin
        , hideOnStart = False
        , allDesktops = True
        , persistent = True
-       , iconRoot = "/home/andriy/.xmonad/xpm/"  -- default: "."
+       , iconRoot = "/home/andriy/dotfiles/xmonad/.xmonad/xpm/"  -- default: "."
        , commands = [ 
                       -- Time and date
                       -- Run Date "<fn=2>\xf133</fn> %b %d %Y - (%H:%M)" "date" 50
@@ -62,6 +62,6 @@ Config { -- font    = "xft:Ubuntu:weight=bold:pixelsize=14:antialias=true:hintin
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <action=`xdotool key control+alt+g`><icon=haskell_20.xpm/> </action><fc=#666666>|</fc> %UnsafeStdinReader% }{ %kbd% <fc=#666666><fn=2>|</fn> %battery% </fc><fc=#666666> <fn=2>|</fn></fc> <fc=#46d9ff> %date%  </fc>"
+       , template = " <icon=haskell_20.xpm/>  <fc=#666666>|</fc> %UnsafeStdinReader% }{ %kbd% <fc=#666666><fn=2>|</fn> %battery% </fc><fc=#666666> <fn=2>|</fn></fc> <fc=#46d9ff> %date%  </fc>"
        }
 
