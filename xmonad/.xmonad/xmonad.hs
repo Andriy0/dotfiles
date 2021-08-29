@@ -2,6 +2,8 @@
 import XMonad
 import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
+import System.Process (readProcess)
+import Network.HostName
 import qualified XMonad.StackSet as W
 
     -- Actions
@@ -119,22 +121,44 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
                  t = 0.25
                  l = 0.25
 
-myStartupHook :: X ()
-myStartupHook = do
-    spawnOnce "xset r rate 300 50"
-    spawnOnce "xsetroot -cursor_name left_ptr"
-    -- spawnOnce "~/.fehbg"
-    spawnOnce "nitrogen --restore"
-    spawnOnce "xsettingsd"
-    spawnOnce "picom --experimental-backends"
-    spawnOnce "nm-applet"
-    spawnOnce "pasystray"
-    spawnOnce "stalonetray --geometry=-500+0 --background=#282c34"
-    spawnOnce "dunst"
-    spawnOnce "mpd"
-    spawnOnce "mpDris2"
-    spawnOnce "redshift"
-    -- spawnOnce "xscreensaver -no-splash"
+mySharedProcesses :: [String]
+mySharedProcesses = [ "xset r rate 300 50"
+                    , "xsetroot -cursor_name left_ptr"
+                    -- , "~/.fehbg"
+                    , "nitrogen --restore"
+                    , "picom --experimental-backends"
+                    , "nm-applet"
+                    , "pasystray"
+                    , "stalonetray --geometry=-540+0 --background=#282c34"
+                    , "dunst"
+                    , "mpd"
+                    , "mpDris2"
+                    , "redshift"
+                    -- , "xscreensaver -no-splash"
+                    ]
+
+myVoidProcesses :: [String]
+myVoidProcesses = []
+  
+myGuixProcesses :: [String]
+myGuixProcesses = [ "xsettingsd"
+                  ]
+
+myProcesses :: String -> [String]
+myProcesses hostname
+    | hostname == "void" = mySharedProcesses ++ myVoidProcesses
+    | hostname == "guixsd" = mySharedProcesses ++ myGuixProcesses
+    | otherwise = mySharedProcesses
+
+spawnMyProcesses :: [String] -> X ()
+spawnMyProcesses [] = return ()
+spawnMyProcesses (x:xs) = do
+    spawnOnce x
+    spawnMyProcesses xs
+
+myStartupHook :: String -> X ()
+myStartupHook hostname = do
+    spawnMyProcesses $ myProcesses hostname
     setWMName "LG3D"
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
@@ -407,8 +431,10 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
     ]
 -- END_KEYS
 
+main :: IO ()
 main = do 
     xmproc <- spawnPipe "xmobar ~/.config/xmobar/xmobar.hs"
+    myHostName <- getHostName
     xmonad $ ewmh def
       -- simple stuff
         { terminal           = myTerminal
@@ -427,7 +453,7 @@ main = do
         , layoutHook         = myLayoutHook
         , manageHook         = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
         , handleEventHook    = docksEventHook <+> fullscreenEventHook <+> myServerModeEventHook
-        , startupHook        = myStartupHook
+        , startupHook        = myStartupHook myHostName
         , logHook = dynamicLogWithPP xmobarPP
             { ppOutput = hPutStrLn xmproc
             , ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]" -- Current workspace in xmobar

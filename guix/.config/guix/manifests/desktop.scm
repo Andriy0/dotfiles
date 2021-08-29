@@ -73,6 +73,7 @@
    "xmobar"
    "ghc-xmonad-contrib"
    "ghc@8.6.5"
+   "ghc-hostname"
    "stalonetray"
    "dunst""btrfs-progs"
    "htop"
