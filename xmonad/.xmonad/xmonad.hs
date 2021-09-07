@@ -138,7 +138,7 @@ mySharedProcesses = [ "xset r rate 300 50"
                     ]
 
 myVoidProcesses :: [String]
-myVoidProcesses = [ "doas guix-daemon --build-users-group=guixbuild"
+myVoidProcesses = [ "doas guix-daemon --build-users-group=guixbuild --substitute-urls='https://mirror.brielmaier.net'"
                   , "emacs --daemon"
                   ]
   
