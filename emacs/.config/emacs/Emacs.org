@@ -1110,9 +1110,7 @@ A manifest for guix package manager, used to install some packages.
   (specifications->manifest
    '(
      "emacs-next"
-     ;; "emacs-vterm"
-     "libtool" ; required to compile vterm
-     "libvterm"
+     "emacs-vterm"
      "python-language-server"
      "sbcl"
      "ccls"

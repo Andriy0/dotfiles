@@ -1,9 +1,7 @@
 (specifications->manifest
  '(
    "emacs-next"
-   ;; "emacs-vterm"
-   "libtool" ; required to compile vterm
-   "libvterm"
+   "emacs-vterm"
    "python-language-server"
    "sbcl"
    "ccls"

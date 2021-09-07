@@ -26,8 +26,8 @@ then
     PS1='[env] \$ '
     # PS1='\e[0;34m\w\e[m \e[0;32m[\e[m\e[0;31menv\e[m\e[0;32m]\e[m \e[0;35m\$\e[m '
 else
-    # PS1='\u@\h \w \$ '
-    eval "$(starship init bash)"
+    PS1='\u@\h \w \$ '
+    # eval "$(starship init bash)"
 fi
 
 export HISTCONTROL=ignoreboth:erasedups
