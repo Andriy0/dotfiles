@@ -19,6 +19,7 @@
  (gnu services networking)
  (gnu services virtualization)
  (gnu services shepherd)
+ (gnu services databases)
  (gnu packages)
  (gnu packages vim)
  (gnu packages pulseaudio)
@@ -97,7 +98,7 @@ Section \"InputClass\"
   MatchIsKeyboard \"on\"
   Option \"XkbLayout\" \"us,ua\"
   Option \"XkbModel\" \"pc105\"
-  Option \"XkbOptions\" \"caps:ctrl_modifier,altwin:menu_win,grp:ctrls_toggle\"
+  Option \"XkbOptions\" \"altwin:menu_win,grp:ctrls_toggle\"
 EndSection
 ")
 
@@ -128,7 +129,7 @@ EndSection
  ;; Partition mounted on /boot/efi.
  (bootloader (bootloader-configuration
               (bootloader grub-efi-bootloader)
-              (target "/boot/efi")))
+              (targets '("/boot/efi"))))
 
  (kernel-arguments
   (append
@@ -276,6 +277,7 @@ EndSection
    ;;           (settings '(("dev.i915.perf_stream_paranoid" ."0")))))
    (service nix-service-type)
    (bluetooth-service #:auto-enable? #f)
+   (service mysql-service-type)
    (remove (lambda (service)
 	      (eq? (service-kind service) gdm-service-type))
 	   %my-desktop-services)))
