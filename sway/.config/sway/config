@@ -1,9 +1,3 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
-
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -18,11 +12,7 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-# set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu rofi -show run | xargs swaymsg exec --
-# set $menu wofi --show run | xargs swaymsg exec --
-
-set $background ~/Downloads/wallpapers/1781x1250_px_Dark_grass_landscape_night_Nobody_reflection_sky-1299747.jpeg
+set $menu rofi -show combi -modi combi | xargs swaymsg exec --
 
 font pango:Sans 12
 
@@ -35,52 +25,37 @@ gaps inner 10
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in /gnu/store/ahm1y3c11zr87n15046jjsap7c08z5h1-sway-1.5.1/share/backgrounds/sway/)
+# Set wallpaper using imv, have bound there W key
 output * bg ~/.cache/wallpaper fill
+
+### Input configuration
 #
-# Example configuration:
-#
-#   output HDMI-A-1 resolution 1920x1080 position 1920,0
-#
-# You can get the names of your outputs by running: swaymsg -t get_outputs
+# Touchpad
+input "2:7:SynPS/2_Synaptics_TouchPad" {
+    dwt enabled
+    tap enabled
+    natural_scroll enabled
+    middle_emulation enabled
+    tap_button_map lmr
+}
+
+# Keyboard
+input "1:1:AT_Translated_Set_2_keyboard" {
+    repeat_delay 300
+    repeat_rate 50
+    xkb_layout us,ua
+    xkb_variant nodeadkeys
+    xkb_options altwin:menu_win,grp:ctrls_toggle
+}
 
 ### Idle configuration
-#
-# Example configuration:
 #
 exec swayidle -w \
          timeout 600 'swaylock -f -c 000000' \
          timeout 630 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 300 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
 
-### Input configuration
-#
-# Example configuration:
-#
-  input "2:7:SynPS/2_Synaptics_TouchPad" {
-      dwt enabled
-      tap enabled
-      natural_scroll enabled
-      middle_emulation enabled
-      tap_button_map lmr
-  }
-
-  input "1:1:AT_Translated_Set_2_keyboard" {
-      repeat_delay 300
-      repeat_rate 50
-      xkb_layout us,ua
-      xkb_variant nodeadkeys
-      xkb_options caps:ctrl_modifier,altwin:menu_win,grp:ctrls_toggle
-  }
-#
-# You can get the names of your inputs by running: swaymsg -t get_inputs
-# Read `man 5 sway-input` for more information about this section.
-
-### Key bindings
+### Keybindings
 #
 # Basics:
 #
@@ -91,7 +66,7 @@ exec swayidle -w \
     bindsym $mod+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+p exec $menu
 
     # Brightness controls
     bindsym --locked XF86MonBrightnessUp exec light -A 1
@@ -113,6 +88,9 @@ exec swayidle -w \
     # Lock the screen
     bindsym $mod+x exec swaylock -f -c 000000
 
+    # Screenshot
+    bindsym $mod+s exec grim -g "$(slurp)" - | wl-copy
+
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
     # Despite the name, also works for non-floating windows.
@@ -121,10 +99,10 @@ exec swayidle -w \
     floating_modifier $mod normal
 
     # Reload the configuration file
-    bindsym $mod+Shift+c reload
+    bindsym $mod+Ctrl+r reload
 
     # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+    bindsym $mod+Ctrl+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 #
 # Moving around:
 #
@@ -186,7 +164,7 @@ exec swayidle -w \
     bindsym $mod+v splitv
 
     # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
+    # bindsym $mod+s layout stacking
     bindsym $mod+w layout tabbed
     bindsym $mod+e layout toggle split
 
@@ -238,40 +216,14 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-#
-# Window rules
+### Window rules
 #
 # for_window [instance="Navigator"] floating enable
 
+### Autostart
 #
-# Status Bar:
-#
-# Read `man 5 sway-bar` for more information about this section.
-# bar {
-#     position top
-
-#     # When the status_command prints a new line to stdout, swaybar updates.
-#     # The default just shows the current date and time.
-#     # status_command while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done
-#     status_command while echo $(date +'%Y-%m-%d %l:%M %p') $(acpi | grep -o ..%); do sleep 10; done
-
-#     colors {
-#         statusline #ffffff
-#         background #323232
-#         inactive_workspace #32323200 #32323200 #5c5c5c
-#     }
-# }
-
-include /gnu/store/ahm1y3c11zr87n15046jjsap7c08z5h1-sway-1.5.1/etc/sway/config.d/*
-
-#
-# Autostart
-#
-# exec pipewire
-# exec pipewire-pulse
+exec_always ~/dotfiles/sway/.config/sway/launch_waybar.sh
 exec redshift
 exec mako
 exec xsettingsd
 exec nm-applet --indicator
-exec pasystray
-exec_always waybar

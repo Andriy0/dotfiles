@@ -1,15 +1,16 @@
 * {
     border: none;
-    border-radius: 0;
+    border-radius: 4px;
     /* `otf-font-awesome` is required to be installed for icons */
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-size: 15px;
+    font-family: "Roboto Mono Medium", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 18px;
     min-height: 0;
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
+    background-color: rgba(43, 48, 59, 0.8);
     border-bottom: 3px solid rgba(100, 114, 125, 0.5);
+    border-radius: 0;
     color: #ffffff;
     transition-property: background-color;
     transition-duration: .5s;
@@ -38,7 +39,7 @@ window#waybar.chromium {
 }
 
 #workspaces button {
-    padding: 0 5px;
+    padding: 0 0.4em;
     background-color: transparent;
     color: #ffffff;
     /* Use box-shadow instead of border so the text isn't offset */
@@ -80,8 +81,8 @@ window#waybar.chromium {
 #idle_inhibitor,
 #mpd {
     padding: 0 10px;
-    margin: 0 4px;
-    color: #ffffff;
+    margin: 6px 3px;
+    color: #333333;
 }
 
 #window,
@@ -100,12 +101,12 @@ window#waybar.chromium {
 }
 
 #clock {
-    background-color: #64727D;
+    background-color: #bbccdd;
 }
 
 #battery {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: #bbccdd;
+    color: #333333;
 }
 
 #battery.charging, #battery.plugged {
@@ -148,7 +149,7 @@ label:focus {
 }
 
 #backlight {
-    background-color: #90b1b1;
+    background-color: #bbccdd;
 }
 
 #network {
@@ -160,8 +161,8 @@ label:focus {
 }
 
 #pulseaudio {
-    background-color: #f1c40f;
-    color: #000000;
+    background-color: #bbccdd;
+    color: #333333;
 }
 
 #pulseaudio.muted {
@@ -192,11 +193,11 @@ label:focus {
 }
 
 #tray {
-    background-color: #2980b9;
+    background-color: #bbccdd;
 }
 
 #idle_inhibitor {
-    background-color: #2d3436;
+    background-color: #bbccdd;
 }
 
 #idle_inhibitor.activated {
@@ -222,9 +223,9 @@ label:focus {
 }
 
 #language {
-    background: #00b093;
-    color: #740864;
+    background: #bbccdd;
+    color: #333333;
     padding: 0 5px;
-    margin: 0 5px;
+    margin: 6px 3px;
     min-width: 16px;
 }
