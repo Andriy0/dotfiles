@@ -181,7 +181,7 @@ mySharedProcesses = [ "xset r rate 300 50"
                     ]
 
 myVoidProcesses :: [String]
-myVoidProcesses = [ "doas guix-daemon --build-users-group=guixbuild"
+myVoidProcesses = [ "doas guix-daemon --build-users-group=guixbuild --substitute-urls='https://mirror.brielmaier.net'"
                   , "emacs --daemon"
                   ]
   
@@ -340,13 +340,13 @@ myClickableWorkspaces = clickable . (map xmobarEscape)
 #+begin_src haskell
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
-    [ title =? "Mozilla Firefox" --> doShift ( myClickableWorkspaces !! 1 )
-    , className =? "Chromium" --> doShift ( myClickableWorkspaces !! 1 )
-    , className =? "Code - OSS" --> doShift ( myClickableWorkspaces !! 2 )
-    , className =? "TelegramDesktop" --> doShift ( myClickableWorkspaces !! 3 )
-    , className =? "GoldenDict" --> doShift ( myClickableWorkspaces !! 4 )
-    , className =? "qutebrowser" --> doShift ( myClickableWorkspaces !! 1 )
-    , className =? "MPlayer" --> doFloat
+    [ -- title =? "Mozilla Firefox" --> doShift ( myClickableWorkspaces !! 1 )
+    -- , className =? "Chromium" --> doShift ( myClickableWorkspaces !! 1 )
+    -- , className =? "Code - OSS" --> doShift ( myClickableWorkspaces !! 2 )
+    -- , className =? "TelegramDesktop" --> doShift ( myClickableWorkspaces !! 3 )
+    -- , className =? "GoldenDict" --> doShift ( myClickableWorkspaces !! 4 )
+    -- , className =? "qutebrowser" --> doShift ( myClickableWorkspaces !! 1 )
+      className =? "MPlayer" --> doFloat
     , resource  =? "Toolkit" --> doFloat -- for Firefox
     , title =? "Picture in picture" --> doFloat -- for Chromium
     , className =? "Gscreenshot" --> doFloat
