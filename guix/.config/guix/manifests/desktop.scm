@@ -53,7 +53,7 @@
    "shared-mime-info"
    "rofi"
    "wofi"
-   "waybar"
+   ;; "waybar"
    "swayidle"
    "swaylock"
    "wl-clipboard"
@@ -65,7 +65,7 @@
    "telegram-desktop"
    "qalculate-gtk"
    "pcmanfm"
-   "foot"
+   ;; "foot"
    "slock"
    "i3lock"
    ;; xmonad stuff

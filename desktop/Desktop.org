@@ -814,7 +814,7 @@ These packages are needed to enable many video formats to be played in browsers 
   "shared-mime-info"
   "rofi"
   "wofi"
-  "waybar"
+  ;; "waybar"
   "swayidle"
   "swaylock"
   "wl-clipboard"
@@ -826,7 +826,7 @@ These packages are needed to enable many video formats to be played in browsers 
   "telegram-desktop"
   "qalculate-gtk"
   "pcmanfm"
-  "foot"
+  ;; "foot"
   "slock"
   "i3lock"
   ;; xmonad stuff

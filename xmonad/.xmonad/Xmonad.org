@@ -367,6 +367,7 @@ myManageHook = composeAll
     , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
     , className =? "jetbrains-studio" --> doFloat
     , title =? "Emulator" --> doFloat
+    , (className =? "Java" <&&> resource =? "java") --> doFloat
     ] <+> namedScratchpadManageHook myScratchPads
 #+end_src
 
