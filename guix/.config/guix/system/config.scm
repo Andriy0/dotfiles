@@ -20,6 +20,7 @@
  (gnu services virtualization)
  (gnu services shepherd)
  (gnu services databases)
+ (gnu services web)
  (gnu packages)
  (gnu packages vim)
  (gnu packages pulseaudio)
@@ -31,6 +32,7 @@
  (gnu packages audio)
  (gnu packages gnome)
  (gnu packages lisp)
+ (gnu packages databases)
  (nongnu packages linux) 
  (nongnu system linux-initrd))
 
@@ -109,14 +111,14 @@ EndSection
  ;;        (list (channel
  ;;               (name 'nonguix)
  ;;               (url "https://gitlab.com/nonguix/nonguix")
- ;;               (commit "967838c40d9d4a04254b9e496b356a8a7b5015ae"))
+ ;;               (commit "265a20a2ce6deed21be37a6707d2e1bb154f76d2"))
  ;;              (channel
  ;;               (name 'guix)
  ;;               (url "https://git.savannah.gnu.org/git/guix.git")
- ;;               (commit "a0fd46304e42f1df711b001a7159160c8e26d21d"))))
+ ;;               (commit "93fba676ba6536f319fcbb157a018960930e80aa"))))
  ;;       (inferior
  ;;        (inferior-for-channels channels)))
- ;;    (first (lookup-inferior-packages inferior "linux" "5.13.10"))))
+ ;;    (first (lookup-inferior-packages inferior "linux" "5.14.3"))))
  (kernel linux)
  (initrd microcode-initrd)
  (firmware (list linux-firmware))
@@ -152,13 +154,13 @@ EndSection
                        (device (file-system-label "guixsd"))
                        (mount-point "/home")
                        (type "btrfs")
-                       (options "subvol=@home"))
+                       (options "ssd,space_cache,compress=zstd,commit=120,subvol=@home"))
                       (file-system
                        (device (file-system-label "guixsd"))
                        (mount-point "/gnu")
                        (type "btrfs")
 		       (flags '(no-atime))
-                       (options "subvol=@gnu"))
+                       (options "ssd,space_cache,compress=zstd,commit=120,subvol=@gnu"))
 		      ;; It didn't work with /var on separate subvol
                       ;; (file-system
                       ;;   (device (file-system-label "guixsd"))
@@ -224,11 +226,6 @@ EndSection
 
  (services
   (cons*
-   ;; (service slim-service-type
-   ;; 	     (slim-configuration
-   ;; 	      (xorg-configuration
-   ;; 	       (xorg-configuration
-   ;; 		(extra-config (list %xorg-libinput-config))))))
    (service sddm-service-type
 	    (sddm-configuration
 	     (numlock "off")
@@ -278,6 +275,31 @@ EndSection
    (service nix-service-type)
    (bluetooth-service #:auto-enable? #f)
    (service mysql-service-type)
+   (service postgresql-service-type
+         (postgresql-configuration
+          (postgresql postgresql-13)))
+   (service httpd-service-type
+         (httpd-configuration
+           (config
+            (httpd-config-file
+	     (modules (cons*
+                      (httpd-module
+                       (name "proxy_module")
+                       (file "modules/mod_proxy.so"))
+                      (httpd-module
+                       (name "proxy_fcgi_module")
+                       (file "modules/mod_proxy_fcgi.so"))
+                      %default-httpd-modules))
+	      (extra-config (list "\
+<FilesMatch \\.php$>
+    SetHandler \"proxy:unix:/var/run/php-fpm.sock|fcgi://localhost/\"
+</FilesMatch>"))
+               (server-name "www.example.com")
+               (document-root "/srv/http/www.example.com")))))
+   (service php-fpm-service-type
+         (php-fpm-configuration
+          (socket "/var/run/php-fpm.sock")
+          (socket-group "httpd")))
    (remove (lambda (service)
 	      (eq? (service-kind service) gdm-service-type))
 	   %my-desktop-services)))

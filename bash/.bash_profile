@@ -16,8 +16,13 @@ done
 . $HOME/.nix-profile/etc/profile.d/nix.sh
 
 # Exports
-export QT_QPA_PLATFORMTHEME=qt5ct
+export PATH="$PATH:$HOME/.local/bin"
+# export QT_QPA_PLATFORMTHEME="qt5ct"
 export XDG_DATA_DIRS="$HOME/.local/share/flatpak/exports/share:$XDG_DATA_DIRS"
+
+if [ "$XDG_SESSION_TYPE" == wayland ]; then
+    export MOZ_ENABLE_WAYLAND=1
+fi
 
 # Start user instance of shepherd
 if [[ ! -S ${XDG_RUNTIME_DIR-$HOME/.cache}/shepherd/socket ]]; then

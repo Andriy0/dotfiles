@@ -1,6 +1,8 @@
 (specifications->manifest
  '(
-   "emacs-next"
+   ;; "emacs-next"
+   "emacs-next-pgtk"
+   ;; "emacs-pgtk-native-comp"
    "emacs-vterm"
    "python-language-server"
    "sbcl"

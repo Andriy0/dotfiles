@@ -19,6 +19,8 @@
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages glib)
   #:use-module (gnu packages gnome)
+  #:use-module (gnu packages samba)
+  #:use-module (gnu packages cmake)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)

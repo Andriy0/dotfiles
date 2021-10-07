@@ -9,6 +9,7 @@
    "arc-theme"
    "arc-icon-theme"
    "matcha-theme"
+   "gnome-themes-standard"
    "hicolor-icon-theme"
    "gnome-icon-theme"
    "gnome-backgrounds"

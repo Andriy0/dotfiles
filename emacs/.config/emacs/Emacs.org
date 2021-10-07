@@ -336,10 +336,10 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+begin_src emacs-lisp
   ;; Color theme
-  (if (equal (system-name) "void")
-      (load-theme 'modus-operandi t)
-    (load-theme 'modus-vivendi t))
-  ;; (load-theme 'modus-vivendi t)
+  ;; (if (equal (system-name) "void")
+  ;;     (load-theme 'modus-operandi t)
+  ;;   (load-theme 'modus-vivendi t))
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** Better Modeline
@@ -1109,7 +1109,9 @@ A manifest for guix package manager, used to install some packages.
 #+begin_src scheme :tangle ~/dotfiles/guix/.config/guix/manifests/emacs.scm :noweb yes
   (specifications->manifest
    '(
-     "emacs-next"
+     ;; "emacs-next"
+     "emacs-next-pgtk"
+     ;; "emacs-pgtk-native-comp"
      "emacs-vterm"
      "python-language-server"
      "sbcl"
