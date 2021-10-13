@@ -821,7 +821,7 @@ These packages are needed to enable many video formats to be played in browsers 
   "wofi"
   ;; "waybar"
   "swayidle"
-  "swaylock"
+  ;; "swaylock"
   "wl-clipboard"
   "mako"
   "grim"

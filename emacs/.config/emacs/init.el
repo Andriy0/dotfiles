@@ -207,7 +207,7 @@
 ;; (if (equal (system-name) "void")
 ;;     (load-theme 'modus-operandi t)
 ;;   (load-theme 'modus-vivendi t))
-(load-theme 'modus-operandi t)
+(load-theme 'modus-vivendi t)
 
 (use-package all-the-icons)
 

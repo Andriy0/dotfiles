@@ -55,7 +55,7 @@
    "wofi"
    ;; "waybar"
    "swayidle"
-   "swaylock"
+   ;; "swaylock"
    "wl-clipboard"
    "mako"
    "grim"
