@@ -9,6 +9,7 @@
  (guix packages)
  (gnu) 
  (gnu system nss) 
+ (gnu system setuid) 
  (gnu services pm)
  (gnu services sound)
  (gnu services dbus)
@@ -53,6 +54,9 @@
 
 (define %my-desktop-services
   (modify-services %desktop-services
+		   ;; (mingetty-service-type config =>
+		   ;; 			  (mingetty-configuration (inherit config)
+		   ;; 						  (auto-login "andriy")))
 		   (elogind-service-type config =>
 					 (elogind-configuration (inherit config)
 								(handle-lid-switch-external-power 'suspend)))
@@ -193,23 +197,24 @@ EndSection
  ;; the log-in screen with F1.
  (packages (append (map specification->package
                     '(;; window managers
-                    "awesome"
+                    ;; "awesome"
 		    ;; "emacs-exwm"
 		    ;; "emacs-desktop-environment"
 		    ;; bspwm sxhkd
-		    "sbcl" "stumpwm"
+		    ;; "sbcl" "stumpwm"
 		    ;; "stumpwm:lib"
-		    "sbcl-stumpwm-ttf-fonts"
+		    ;; "sbcl-stumpwm-ttf-fonts"
 		    "font-dejavu"
 		    ;; openbox xfce bspwm
-		    "sxhkd" "rofi" "dmenu"
+		    ;; "sxhkd" "rofi" "dmenu"
 		    "sway" "xdg-desktop-portal" "xdg-desktop-portal-wlr"
 		    ;; editors
-                    "emacs-next" "vim" "neovim"
+                    "emacs-next-pgtk" "vim" "neovim"
                     ;; terminal emulator
                     "xterm" "alacritty"
-		    ;; mics
-		    "git" "xf86-input-libinput"
+		    ;; misc
+		    "git"
+		    ;; "xf86-input-libinput"
 		    ;; "pulseaudio"
 		    "alsa-utils"
 		    "bluez" "bluez-alsa"
@@ -219,6 +224,13 @@ EndSection
                     ;; for HTTPS access
                     "nss-certs"))
                    %base-packages))
+(setuid-programs
+    (append
+      (list (file-like->setuid-program
+	      (file-append
+		(specification->package "swaylock-effects")
+		"/bin/swaylock")))
+      %setuid-programs))
 
  ;; Use the "desktop" services, which include the X11
  ;; log-in service, networking with NetworkManager, and more.
@@ -261,7 +273,7 @@ EndSection
    ;; (service alsa-service-type
    ;; 	     (alsa-configuration
    ;; 	      (pulseaudio? #f)))
-   (screen-locker-service xscreensaver "xscreensaver")
+   ;; (screen-locker-service xscreensaver "xscreensaver")
    (service libvirt-service-type
 	    (libvirt-configuration
 	     (unix-sock-group "libvirt")
@@ -275,9 +287,9 @@ EndSection
    (service nix-service-type)
    (bluetooth-service #:auto-enable? #f)
    (service mysql-service-type)
-   (service postgresql-service-type
-         (postgresql-configuration
-          (postgresql postgresql-13)))
+   ;; (service postgresql-service-type
+   ;;       (postgresql-configuration
+   ;;        (postgresql postgresql-13)))
    (service httpd-service-type
          (httpd-configuration
            (config
