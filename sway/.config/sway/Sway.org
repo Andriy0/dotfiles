@@ -1,6 +1,5 @@
 #+startup: overview
 #+title: SwayWM Configuration
-#+property: header-args :tangle ~/dotfiles/sway/.config/sway/config
 
 * TABLE OF CONTENTS
 :PROPERTIES:
@@ -23,7 +22,7 @@ This file contains my configuration for SwayWM.
 
 * VARIABLES
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -34,12 +33,12 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term foot
+set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-# set $menu rofi -show combi -modi combi | xargs swaymsg exec --
-set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
+set $menu rofi -show combi -modi combi | xargs swaymsg exec --
+# set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
 
 font pango:Sans 12
 
@@ -56,7 +55,7 @@ Example configuration:
    =output HDMI-A-1 resolution 1920x1080 position 1920,0=
 You can get the names of your outputs by running: swaymsg -t get_outputs
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Output configuration
 #
 # Set wallpaper using imv, have bound there W key
@@ -67,7 +66,7 @@ output * bg ~/.cache/wallpaper fill
 You can get the names of your inputs by running: swaymsg -t get_inputs
 Read `man 5 sway-input` for more information about this section.
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Input configuration
 #
 # Touchpad
@@ -94,18 +93,18 @@ This will lock your screen after 300 seconds of inactivity, then turn off
 your displays after another 300 seconds, and turn your screens back on when
 resumed. It will also lock your screen before your computer goes to sleep.
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Idle configuration
 #
 exec swayidle -w \
-         timeout 600 'swaylock -f -c 000000' \
+         timeout 600 'swaylock -f -i ~/.cache/wallpaper --clock --indicator' \
          timeout 630 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
 #+end_src
 
 * KEYBINDINGS
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Keybindings
 #
 # Basics:
@@ -137,7 +136,7 @@ exec swayidle -w \
     bindsym --locked $mod+F8 exec playerctl next
 
     # Lock the screen
-    bindsym --to-code $mod+x exec swaylock -f -c 000000
+    bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
 
     # Screenshot
     bindsym --to-code $mod+s exec grim -g "$(slurp)" - | wl-copy
@@ -270,25 +269,53 @@ bindsym --to-code $mod+r mode "resize"
 
 * WINDOW RULES
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Window rules
 #
 for_window [title="Dbeaver" app_id="java"] floating enable
-for_window [title="Virtual Machine Manager" app_id="..virt-manager-real-real"] floating enable
-for_window [app_id="pavucontrol"] floating enable
+# for_window [title="Virtual Machine Manager" app_id="..virt-manager-real-real"] floating enable
+# for_window [app_id="pavucontrol"] floating enable
 for_window [title="Поділіться своєю новою зустріччю — Nightly"] floating enable
 for_window [title="Nightly — Sharing Indicator"] floating enable
 for_window [title="Picture-in-Picture"] floating enable
 #+end_src
 
+* GTK THEMING
+
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
+set $gnome-schema org.gnome.desktop.interface
+
+exec_always {
+  gsettings set $gnome-schema icon-theme "Papirus-Dark"
+  gsettings set $gnome-schema gtk-theme "Arc-Dark"
+  # gsettings set $gnome-schema cursor-theme 'cursor theme name'
+  gsettings set $gnome-schems font-name "Sans 13"
+}
+#+end_src
+
+#+begin_src conf :tangle ~/.gtkrc-2.0
+gtk-icon-theme-name = "Papirus-Dark"
+gtk-theme-name = "Arc-Dark"
+gtk-font-name = "DejaVu Sans 13"
+#+end_src
+
+#+begin_src conf :tangle ~/.config/gtk-3.0/settings.ini
+[Settings]
+gtk-icon-theme-name = Papirus-Dark
+gtk-theme-name = Arc-Dark
+gtk-font-name = DejaVu Sans 13
+#+end_src
+
 * AUTOSTART
 
-#+begin_src conf
+#+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Autostart
 #
 exec_always ~/dotfiles/sway/.config/sway/launch_waybar.sh
 exec redshift
 exec mako
-exec xsettingsd
+# exec xsettingsd
 exec nm-applet --indicator
+# exec /gnu/store/clc1pb7n8qbc7202p8n9g2pbbg13ryvi-xdg-desktop-portal-wlr-0.4.0/libexec/xdg-desktop-portal-wlr
+# exec /gnu/store/wa7isqjys60hzkcnypv8a619zk9zwzxz-xdg-desktop-portal-1.8.1/libexec/xdg-desktop-portal -r
 #+end_src

@@ -8,12 +8,12 @@ set $down j
 set $up k
 set $right l
 # Your preferred terminal emulator
-set $term foot
+set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-# set $menu rofi -show combi -modi combi | xargs swaymsg exec --
-set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
+set $menu rofi -show combi -modi combi | xargs swaymsg exec --
+# set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
 
 font pango:Sans 12
 
@@ -52,9 +52,9 @@ input "1:1:AT_Translated_Set_2_keyboard" {
 ### Idle configuration
 #
 exec swayidle -w \
-         timeout 600 'swaylock -f -c 000000' \
+         timeout 600 'swaylock -f -i ~/.cache/wallpaper --clock --indicator' \
          timeout 630 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -c 000000'
+         before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
 
 ### Keybindings
 #
@@ -87,7 +87,7 @@ exec swayidle -w \
     bindsym --locked $mod+F8 exec playerctl next
 
     # Lock the screen
-    bindsym --to-code $mod+x exec swaylock -f -c 000000
+    bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
 
     # Screenshot
     bindsym --to-code $mod+s exec grim -g "$(slurp)" - | wl-copy
@@ -220,16 +220,27 @@ bindsym --to-code $mod+r mode "resize"
 ### Window rules
 #
 for_window [title="Dbeaver" app_id="java"] floating enable
-for_window [title="Virtual Machine Manager" app_id="..virt-manager-real-real"] floating enable
-for_window [app_id="pavucontrol"] floating enable
+# for_window [title="Virtual Machine Manager" app_id="..virt-manager-real-real"] floating enable
+# for_window [app_id="pavucontrol"] floating enable
 for_window [title="Поділіться своєю новою зустріччю — Nightly"] floating enable
 for_window [title="Nightly — Sharing Indicator"] floating enable
 for_window [title="Picture-in-Picture"] floating enable
+
+set $gnome-schema org.gnome.desktop.interface
+
+exec_always {
+  gsettings set $gnome-schema icon-theme "Papirus-Dark"
+  gsettings set $gnome-schema gtk-theme "Arc-Dark"
+  # gsettings set $gnome-schema cursor-theme 'cursor theme name'
+  gsettings set $gnome-schems font-name "Sans 13"
+}
 
 ### Autostart
 #
 exec_always ~/dotfiles/sway/.config/sway/launch_waybar.sh
 exec redshift
 exec mako
-exec xsettingsd
+# exec xsettingsd
 exec nm-applet --indicator
+# exec /gnu/store/clc1pb7n8qbc7202p8n9g2pbbg13ryvi-xdg-desktop-portal-wlr-0.4.0/libexec/xdg-desktop-portal-wlr
+# exec /gnu/store/wa7isqjys60hzkcnypv8a619zk9zwzxz-xdg-desktop-portal-1.8.1/libexec/xdg-desktop-portal -r
