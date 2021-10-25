@@ -12,8 +12,8 @@
    (service home-bash-service-type
             (home-bash-configuration
 	     ;; (guix-defaults? #f)
-             ;; (bash-profile
-             ;;  '("source /run/current-system/profile/etc/profile.d/nix.sh"))
+             (bash-profile
+              '("source /run/current-system/profile/etc/profile.d/nix.sh"))
 ;; 	     (bash-profile '("\
 ;; export HISTFILE=\"$XDG_CACHE_HOME\"/.bash_history"))
 	     ;; (bashrc

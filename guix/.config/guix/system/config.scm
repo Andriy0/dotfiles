@@ -108,6 +108,10 @@ Section \"InputClass\"
 EndSection
 ")
 
+(define %local-php-ini
+  (plain-file "php.ini"
+	      "upload_max_filesize = 13M"))
+
 (operating-system
  ;; (kernel 
  ;;  (let*
@@ -197,7 +201,7 @@ EndSection
  ;; the log-in screen with F1.
  (packages (append (map specification->package
                     '(;; window managers
-                    ;; "awesome"
+                    "awesome"
 		    ;; "emacs-exwm"
 		    ;; "emacs-desktop-environment"
 		    ;; bspwm sxhkd
@@ -287,9 +291,9 @@ EndSection
    (service nix-service-type)
    (bluetooth-service #:auto-enable? #f)
    (service mysql-service-type)
-   ;; (service postgresql-service-type
-   ;;       (postgresql-configuration
-   ;;        (postgresql postgresql-13)))
+   (service postgresql-service-type
+         (postgresql-configuration
+          (postgresql postgresql-13)))
    (service httpd-service-type
          (httpd-configuration
            (config
@@ -311,7 +315,8 @@ EndSection
    (service php-fpm-service-type
          (php-fpm-configuration
           (socket "/var/run/php-fpm.sock")
-          (socket-group "httpd")))
+          (socket-group "httpd")
+	  (php-ini-file %local-php-ini)))
    (remove (lambda (service)
 	      (eq? (service-kind service) gdm-service-type))
 	   %my-desktop-services)))
