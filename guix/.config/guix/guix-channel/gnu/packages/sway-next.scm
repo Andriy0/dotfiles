@@ -9,6 +9,7 @@
   #:use-module (gnu packages linux)
   #:use-module (gnu packages gl)
   #:use-module (gnu packages pkg-config)
+  #:use-module (gnu packages autotools)
   #:use-module (gnu packages man)
   #:use-module (gnu packages calendar)
   #:use-module (gnu packages pretty-print)
@@ -79,7 +80,7 @@
   (package
     (inherit wayland-protocols)
     (name "wayland-protocols")
-    (version "1.21")
+    (version "1.23")
     (source (origin
               (method url-fetch)
               (uri (string-append
@@ -87,10 +88,14 @@
                     "wayland-protocols-" version ".tar.xz"))
               (sha256
                (base32
-                "1rfdlkzz67qsb955zqb8jbw3m22pl6ppvrvfq8bqiqcb5n24b6dr"))))
+                "0xizccackgwszjhlq7jjiv2z2gwppljx0w32ga91bxlnby8z22kc"))))
     (build-system gnu-build-system)
     (inputs
-     `(("wayland" ,wayland-next)))))
+     `(("wayland" ,wayland-next)))
+    (native-inputs
+     `(("pkg-config" ,pkg-config)
+       ("autoconf" ,autoconf)
+       ("automake" ,automake)))))
     
 (define-public wlroots-next
   (package
