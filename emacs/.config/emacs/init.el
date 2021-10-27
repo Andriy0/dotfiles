@@ -677,11 +677,12 @@
 
 (use-package dired-open
   :custom
-  (dired-open-extensions '(("png" . "feh")
+  (dired-open-extensions '(("png" . "imv")
                            ("mkv" . "mpv")
                            ("odt" . "libreoffice")
                            ("ods" . "libreoffice")
                            ("docx" . "libreoffice")
+                           ("doc" . "libreoffice")
                            ("pptx" . "libreoffice")
                            ("pdf" . "evince"))))
 
