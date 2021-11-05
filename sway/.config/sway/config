@@ -237,7 +237,7 @@ exec_always {
 
 ### Autostart
 #
-exec_always ~/dotfiles/sway/.config/sway/launch_waybar.sh
+exec_always ~/dotfiles/waybar/.config/sway/launch.sh
 exec redshift
 exec mako
 # exec xsettingsd
