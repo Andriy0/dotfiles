@@ -107,9 +107,9 @@ This section configures basic UI settings that remove unneeded elements to make 
   ;; Set up the ring bell
   (setq ring-bell-function 'ignore)
   
-  (column-number-mode)
-  (global-display-line-numbers-mode t)
-  (menu-bar--display-line-numbers-mode-relative)
+  ;; (column-number-mode)
+  ;; (global-display-line-numbers-mode t)
+  ;; (menu-bar--display-line-numbers-mode-relative)
   
   ;; Set frame transparency
   (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
@@ -339,7 +339,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   ;; (if (equal (system-name) "void")
   ;;     (load-theme 'modus-operandi t)
   ;;   (load-theme 'modus-vivendi t))
-  (load-theme 'modus-vivendi t)
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** Better Modeline
@@ -348,9 +348,11 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 *NOTE:* The first time you load your configuration on a new machine, you’ll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons)
-  
+  (use-package all-the-icons
+    :disabled)
+
   (use-package doom-modeline
+    :disabled
     :init (doom-modeline-mode 1)
     :custom ((doom-modeline-height 15)))
 #+end_src
@@ -691,12 +693,33 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
   ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 #+end_src
 
+* Text, find, replace tools
+** wgrep
+[[https://github.com/mhayashi1120/Emacs-wgrep][wgrep]] allows you to edit a grep buffer and apply those changes to the file buffer like =sed= interactively. No need to learn sed script, just learn Emacs.
+
+#+begin_src emacs-lisp
+  (use-package wgrep
+    :defer t)
+#+end_src
+
 * Development
 ** Magit
 
 #+begin_src emacs-lisp  
   (use-package magit
     :commands magit-status)  
+#+end_src
+** Direnv
+[[https://github.com/wbolster/emacs-direnv][this package]] provides [[https://direnv.net/][direnv]] integration for emacs.
+
+it works by invoking direnv to obtain the environment for the current file, then updating the emacs variables process-environment and exec-path.
+
+the result is that programs started from within emacs, such as inferior shells, linters, compilers, and test runners, will be looked up in the correct =$PATH=, and will be started with the correct environment variables set.
+
+#+begin_src emacs-lisp
+  (use-package direnv
+   :config
+   (direnv-mode))
 #+end_src
 
 ** Languages
@@ -825,6 +848,20 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 #+end_src
 
 *** C/C++
+
+*** HTML
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :mode "//.html'")
+#+end_src
+
+*** PHP
+
+#+begin_src emacs-lisp
+  (use-package php-mode
+    :mode "//.php'")
+#+end_src
 
 ** Eglot
 [[https://github.com/joaotavora/eglot][Eglot]] is an Emacs =LSP= client. It's more minimal than lsp-mode.

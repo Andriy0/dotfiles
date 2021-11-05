@@ -124,7 +124,7 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 ** EXWM config
 *** Ivy-posframe
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
   (use-package ivy-posframe
     :after ivy
     :custom
@@ -144,7 +144,7 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 
 *** Helper functions
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
   (defun efs/run-in-background (command)
     (let ((command-parts (split-string command "[ ]+")))
       (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts)))))
@@ -188,7 +188,7 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 #+end_src
 *** Init hook
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
     (defun efs/exwm-init-hook ()
       ;; Make workspace 1 be the one where we land at startup
       (exwm-workspace-switch-create 1)
@@ -221,7 +221,7 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 
 *** Configure exwm via use-package
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
 	(use-package exwm
 	  :config
 	  ;; Set the default number of workspaces
@@ -332,14 +332,14 @@ We use the excellent [[https://github.com/ch11ng/exwm][EXWM]] module as the basi
 
 *** Start server
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
   ;; (server-start)
 #+end_src
 
 ** Desktop Key Bindings
 We use the [[https://github.com/DamienCassou/desktop-environment][desktop-environment]] package to automatically bind to well-known programs for controlling the volume, screen brightness, media playback, and doing other things like locking the screen and taking screenshots. Make sure that you install the necessary programs to make this functionality work! Check the [[https://github.com/DamienCassou/desktop-environment#default-configuration][default programs]] list to know what you need to install.
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
   (use-package desktop-environment
     :after exwm
     :config (desktop-environment-mode)
@@ -360,7 +360,7 @@ Desktop entry content:
   [Desktop Entry]
   Name=MY-EXWM
   Comment=Emacs Window Manager
-  Exec=sh /home/andriy/.config/emacs/exwm/start-exwm.sh
+  Exec=sh /home/andriy/.config/emacs/main-config/exwm/start-exwm.sh
   TryExec=sh
   Type=Application
   # X-LightDM-DesktopName=exwm
@@ -370,7 +370,7 @@ Desktop entry content:
 ** Launcher Script
 This launcher script is invoked by =my-exwm.desktop= to start Emacs and load our desktop environment configuration. We also start up some other helpful applications to configure the desktop experience.
 
-#+begin_src conf :tangle ~/dotfiles/emacs/.config/emacs/exwm/start-exwm.sh
+#+begin_src conf :tangle ~/dotfiles/emacs/.config/emacs/main-config/exwm/start-exwm.sh
   # Set the screen DPI (uncomment this if needed!)
   # xrdb ~/.emacs.d/exwm/Xresources
   
@@ -393,19 +393,19 @@ This launcher script is invoked by =my-exwm.desktop= to start Emacs and load our
   
   # Fire it up
   xhost +SI:localuser:$USER
-  exec dbus-launch --exit-with-session emacs-28.0.50 -mm -l ~/.config/emacs/desktop.el
+  exec dbus-launch --exit-with-session emacs-28.0.50 -mm -l ~/.config/emacs/main-config/desktop.el
   # exec dbus-launch --exit-with-session emacsclient --eval "(exwm-init)" -c -F '((fullscreen . fullboth))'
 #+end_src
 
 Make it executable.
 
 #+begin_src shell
-  chmod 755 ~/dotfiles/emacs/.config/emacs/exwm/start-exwm.sh
+  chmod 755 ~/dotfiles/emacs/.config/emacs/main-config/exwm/start-exwm.sh
 #+end_src
 
 ** Polybar
 
-#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/desktop.el
+#+begin_src emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/main-config/desktop.el
   (defvar efs/polybar-process nil
     "Holds the process of the running Polybar instance, if any")
   

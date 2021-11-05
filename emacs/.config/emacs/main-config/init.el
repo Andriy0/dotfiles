@@ -23,9 +23,9 @@
 ;; Set up the ring bell
 (setq ring-bell-function 'ignore)
 
-(column-number-mode)
-(global-display-line-numbers-mode t)
-(menu-bar--display-line-numbers-mode-relative)
+;; (column-number-mode)
+;; (global-display-line-numbers-mode t)
+;; (menu-bar--display-line-numbers-mode-relative)
 
 ;; Set frame transparency
 (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
@@ -207,11 +207,13 @@
 ;; (if (equal (system-name) "void")
 ;;     (load-theme 'modus-operandi t)
 ;;   (load-theme 'modus-vivendi t))
-(load-theme 'modus-vivendi t)
+(load-theme 'modus-operandi t)
 
-(use-package all-the-icons)
+(use-package all-the-icons
+  :disabled)
 
 (use-package doom-modeline
+  :disabled
   :init (doom-modeline-mode 1)
   :custom ((doom-modeline-height 15)))
 
@@ -463,8 +465,15 @@
 
 ;; (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 
+(use-package wgrep
+  :defer t)
+
 (use-package magit
   :commands magit-status)
+
+(use-package direnv
+ :config
+ (direnv-mode))
 
 ;; (defun efs/lsp-mode-setup ()
 ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -529,6 +538,12 @@
   :commands slime
   :config
   (setq inferior-lisp-program "sbcl --noinform --no-linedit"))
+
+(use-package web-mode
+  :mode "//.html'")
+
+(use-package php-mode
+  :mode "//.php'")
 
 (use-package eglot
   :defer t)
