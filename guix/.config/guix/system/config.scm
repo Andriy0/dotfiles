@@ -22,6 +22,7 @@
  (gnu services shepherd)
  (gnu services databases)
  (gnu services web)
+ (gnu services docker)
  (gnu packages)
  (gnu packages vim)
  (gnu packages pulseaudio)
@@ -110,7 +111,7 @@ EndSection
 
 (define %local-php-ini
   (plain-file "php.ini"
-	      "upload_max_filesize = 13M"))
+	      "upload_max_filesize = 10M"))
 
 (operating-system
  ;; (kernel 
@@ -213,7 +214,8 @@ EndSection
 		    ;; "sxhkd" "rofi" "dmenu"
 		    "sway" "xdg-desktop-portal" "xdg-desktop-portal-wlr"
 		    ;; editors
-                    "emacs-next-pgtk" "vim" "neovim"
+                    "emacs-next-pgtk"
+		    "vim" "neovim"
                     ;; terminal emulator
                     "xterm" "alacritty"
 		    ;; misc
@@ -317,6 +319,7 @@ EndSection
           (socket "/var/run/php-fpm.sock")
           (socket-group "httpd")
 	  (php-ini-file %local-php-ini)))
+   (service docker-service-type)
    (remove (lambda (service)
 	      (eq? (service-kind service) gdm-service-type))
 	   %my-desktop-services)))
