@@ -1,4 +1,4 @@
-(define-module (gnu packages foot-next)
+(define-module (gnu my-packages foot-next)
   #:use-module (gnu packages terminals)
   #:use-module (guix packages)
   #:use-module (guix git-download))

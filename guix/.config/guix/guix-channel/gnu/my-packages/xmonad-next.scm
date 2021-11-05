@@ -1,4 +1,4 @@
-(define-module (gnu packages xmonad-next)
+(define-module (gnu my-packages xmonad-next)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix build-system haskell)

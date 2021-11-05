@@ -1,4 +1,4 @@
-(define-module (gnu packages flatpak-next)
+(define-module (gnu my-packages flatpak-next)
   #:use-module (gnu packages package-management)
   #:use-module (guix packages)
   #:use-module (guix download))

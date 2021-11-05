@@ -1,4 +1,4 @@
-(define-module (gnu packages my-node-xyz)
+(define-module (gnu my-packages my-node-xyz)
   #:use-module (gnu packages node-xyz)
   #:use-module ((guix licenses) #:prefix license:)
   #:use-module (guix packages)

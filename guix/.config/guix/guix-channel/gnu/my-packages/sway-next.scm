@@ -1,4 +1,4 @@
-(define-module (gnu packages sway-next)
+(define-module (gnu my-packages sway-next)
   #:use-module (gnu packages wm)
   #:use-module (gnu packages gtk)
   #:use-module (gnu packages freedesktop)
