@@ -286,23 +286,23 @@ for_window [title="Picture-in-Picture"] floating enable
 set $gnome-schema org.gnome.desktop.interface
 
 exec_always {
-  gsettings set $gnome-schema icon-theme "Papirus-Dark"
-  gsettings set $gnome-schema gtk-theme "Arc-Dark"
+  gsettings set $gnome-schema icon-theme "ePapirus"
+  gsettings set $gnome-schema gtk-theme "Arc"
   # gsettings set $gnome-schema cursor-theme 'cursor theme name'
   gsettings set $gnome-schems font-name "Sans 13"
 }
 #+end_src
 
 #+begin_src conf :tangle ~/.gtkrc-2.0
-gtk-icon-theme-name = "Papirus-Dark"
-gtk-theme-name = "Arc-Dark"
+gtk-icon-theme-name = "ePapirus"
+gtk-theme-name = "Arc"
 gtk-font-name = "DejaVu Sans 13"
 #+end_src
 
 #+begin_src conf :tangle ~/.config/gtk-3.0/settings.ini
 [Settings]
-gtk-icon-theme-name = Papirus-Dark
-gtk-theme-name = Arc-Dark
+gtk-icon-theme-name = ePapirus
+gtk-theme-name = Arc
 gtk-font-name = DejaVu Sans 13
 #+end_src
 
