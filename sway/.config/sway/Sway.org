@@ -311,7 +311,7 @@ gtk-font-name = DejaVu Sans 13
 #+begin_src conf :tangle ~/dotfiles/sway/.config/sway/config
 ### Autostart
 #
-exec_always ~/dotfiles/waybar/.config/sway/launch.sh
+exec_always ~/dotfiles/waybar/.config/waybar/launch.sh
 exec redshift
 exec mako
 # exec xsettingsd
