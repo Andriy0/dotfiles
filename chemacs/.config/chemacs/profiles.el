@@ -1,2 +1,2 @@
-(("default" . ((user-emacs-directory . "~/dotfiles/emacs/.config/emacs/main-config")))
-  ("new-config" . ((user-emacs-directory . "~/dotfiles/emacs/.config/emacs/new-config"))))
+(("default" . ((user-emacs-directory . "~/.config/emacs/main-config")))
+  ("new-config" . ((user-emacs-directory . "~/.config/emacs/new-config"))))
