@@ -1,65 +1,8 @@
 ;; NOTE: init.el is now generated from Emacs.org.  Please edit that file
 ;;       in Emacs and init.el will be generated automatically!
 
-;; You will most likely need to adjust this font size for your system!
-(defvar efs/default-font-size 160)
-(defvar efs/default-variable-font-size 160)
-
-;; Make frame transparency overridable
-(defvar efs/frame-transparency '(90 . 90))
-
-(setq inhibit-startup-message t)
-
-(scroll-bar-mode -1)        ; Disable visible scrollbar
-(tool-bar-mode -1)          ; Disable the toolbar
-(tooltip-mode -1)           ; Disable tooltips
-(set-fringe-mode 10)        ; Give some breathing room
-
-(menu-bar-mode -1)            ; Disable the menu bar
-
-;; Set up the visible bell
-(setq visible-bell nil)
-
-;; Set up the ring bell
-(setq ring-bell-function 'ignore)
-
-;; (column-number-mode)
-;; (global-display-line-numbers-mode t)
-;; (menu-bar--display-line-numbers-mode-relative)
-
-;; Set frame transparency
-(set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
-(add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
-;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;; For correct fullscreen mode
-(setq frame-resize-pixelwise t)
-
-;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-                vterm-mode-hook
-                eshell-mode-hook
-                treemacs-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
-
-;; Disable blink cursor
-(blink-cursor-mode 0)
-
-;; Accept 'y' and 'n' rather than 'yes' and 'no'.
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; Stop creating backup and autosave files.
-(setq make-backup-files nil
-      auto-save-default nil)
-
-;; (server-start)
-
 ;; Garbage collection
-(setq gc-cons-threshold (* 50 1000 1000))
-;; (add-hook 'focus-out-hook 'garbage-collect)
+(add-hook 'focus-out-hook 'garbage-collect)
 
 ;; Use a hook so the message doesn't get clobbered by other messages.
 (add-hook 'emacs-startup-hook
@@ -113,9 +56,9 @@
       (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
@@ -123,7 +66,125 @@
 ;;  Effectively replace use-package with straight-use-package
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
+(setq use-package-verbose t)
 ;; (setq straight-check-for-modifications '(check-on-save find-when-checking))
+
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+
+(use-package general
+  :defer 1
+  :config
+  (general-create-definer efs/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (efs/leader-keys
+    "t"  '(:ignore t :which-key "toggles")
+    "tt" '(counsel-load-theme :which-key "choose theme")
+    "c" '(:ignore t :which-key "configs")
+    "ca" '((lambda () (interactive) (find-file "~/dotfiles/emacs/.config/emacs/Emacs.org")) :which-key "Emacs.org")
+    "cb" '((lambda () (interactive) (find-file "~/dotfiles/desktop/Desktop.org")) :which-key "Desktop.org")
+    "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
+    "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
+    "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/.xmonad/Xmonad.org")) :which-key "Xmonad.org")))
+
+(use-package evil
+  ;; :disabled
+  :defer 1
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+(use-package evil-collection
+  ;; :disabled
+  :defer 1
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package undo-tree
+  :disabled
+  :defer 1
+  :after evil
+  :config
+  (global-undo-tree-mode 1))
+
+;; You will most likely need to adjust this font size for your system!
+(defvar efs/default-font-size 160)
+(defvar efs/default-variable-font-size 160)
+
+;; Make frame transparency overridable
+(defvar efs/frame-transparency '(90 . 90))
+
+(setq inhibit-startup-message t)
+
+;; Set up the visible bell
+(setq visible-bell nil)
+
+;; Set up the ring bell
+(setq ring-bell-function 'ignore)
+
+;; (column-number-mode)
+;; (global-display-line-numbers-mode t)
+;; (menu-bar--display-line-numbers-mode-relative)
+
+;; Set frame transparency
+(set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
+(add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
+;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; For correct fullscreen mode
+(setq frame-resize-pixelwise t)
+
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                vterm-mode-hook
+                eshell-mode-hook
+                treemacs-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+;; Disable blink cursor
+(blink-cursor-mode 0)
+
+;; Accept 'y' and 'n' rather than 'yes' and 'no'.
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; Stop creating backup and autosave files.
+(setq make-backup-files nil
+      auto-save-default nil)
+
+;; (server-start)
+
+(use-package modus-themes
+  :disabled)
+
+(use-package doom-themes
+  :disabled)
+
+;; Color theme
+;; (if (equal (system-name) "void")
+;;     (load-theme 'modus-operandi t)
+;;   (load-theme 'modus-vivendi t))
+(load-theme 'modus-operandi t)
 
 (if (equal (system-name) "guixsd")
   (setq my-fixed-font-name "mononoki")
@@ -147,67 +208,8 @@
                   (efs/set-font-faces))))
   (efs/set-font-faces))
 
-;; Make ESC quit prompts
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-
-(use-package general
-  :config
-  (general-create-definer efs/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (efs/leader-keys
-    "t"  '(:ignore t :which-key "toggles")
-    "tt" '(counsel-load-theme :which-key "choose theme")
-    "c" '(:ignore t :which-key "configs")
-    "ca" '((lambda () (interactive) (find-file "~/dotfiles/emacs/.config/emacs/Emacs.org")) :which-key "Emacs.org")
-    "cb" '((lambda () (interactive) (find-file "~/dotfiles/desktop/Desktop.org")) :which-key "Desktop.org")
-    "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
-    "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
-    "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/.xmonad/Xmonad.org")) :which-key "Xmonad.org")))
-
-(use-package evil
-  :init
-  (setq evil-want-integration t)
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  (setq evil-want-C-i-jump nil)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-
-  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-
-  ;; Use visual line motions even outside of visual-line-mode buffers
-  ;; (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  ;; (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-
-(use-package undo-tree
-  :after evil
-  :config
-  (global-undo-tree-mode 1))
-
 (use-package command-log-mode
   :commands command-log-mode)
-
-(use-package modus-themes)
-
-(use-package doom-themes)
-
-;; Color theme
-;; (if (equal (system-name) "void")
-;;     (load-theme 'modus-operandi t)
-;;   (load-theme 'modus-vivendi t))
-(load-theme 'modus-operandi t)
 
 (use-package all-the-icons
   :disabled)
@@ -218,7 +220,7 @@
   :custom ((doom-modeline-height 15)))
 
 (use-package which-key
-  :after evil
+  :defer 2
   ;; :init (which-key-mode)
   :diminish which-key-mode
   :custom
@@ -232,6 +234,7 @@
 ;;   (which-key-posframe-mode))
 
 (use-package savehist
+  :defer 1
   :init
   (savehist-mode 1))
 
@@ -277,6 +280,8 @@
   (helm-mode 1))
 
 (use-package ivy
+  :defer 1
+  :after counsel
   :diminish ivy-mode
   :bind (("C-s" . swiper)
          ;; :map ivy-minibuffer-map
@@ -310,6 +315,7 @@
   (ivy-rich-mode 1))
 
 (use-package counsel
+  :defer 1
   :bind (("C-M-j" . 'counsel-switch-buffer)
          :map minibuffer-local-map
          ("C-r" . 'counsel-minibuffer-history))
@@ -338,9 +344,11 @@
   :config 
   (ivy-posframe-mode 1))
 
-(use-package diminish)
+(use-package diminish
+  :defer 1)
 
 (use-package helpful
+  :defer 2
   :custom
   (counsel-describe-function-function #'helpful-callable)
   (counsel-describe-variable-function #'helpful-variable)
@@ -367,6 +375,39 @@
   :commands smooth-scrolling-mode)
   ;; :custom
   ;; (smooth-scrolling-mode 1))
+
+(defun efs/org-mode-setup ()
+  (org-indent-mode 1)
+  (electric-indent-local-mode -1)
+  (variable-pitch-mode 1)
+  (visual-line-mode 0))
+
+(use-package org
+  :defer 1
+  ;; :pin org
+  :commands (org-capture org-agenda)
+  :hook (org-mode . efs/org-mode-setup)
+  :config
+  ;; (setq org-ellipsis " ▾")
+
+  ;; Place for Org Agenda config
+
+  (efs/org-font-setup))
+
+;; (use-package org-bullets
+;;   :after org
+;;   :hook (org-mode . org-bullets-mode)
+;;   :custom
+;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(defun efs/org-mode-visual-fill ()
+  (setq visual-fill-column-width 100
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  ;; :disabled
+  :hook (org-mode . efs/org-mode-visual-fill))
 
 (defun efs/org-font-setup ()
   ;; Replace list hyphen with dot
@@ -395,39 +436,6 @@
   (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
   (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
-
-(defun efs/org-mode-setup ()
-  (org-indent-mode 1)
-  (electric-indent-local-mode -1)
-  (variable-pitch-mode 1)
-  (visual-line-mode 0))
-
-(use-package org
-  ;; :defer t
-  ;; :pin org
-  :commands (org-capture org-agenda)
-  :hook (org-mode . efs/org-mode-setup)
-  :config
-  ;; (setq org-ellipsis " ▾")
-
-  ;; Place for Org Agenda config
-
-  (efs/org-font-setup))
-
-;; (use-package org-bullets
-;;   :after org
-;;   :hook (org-mode . org-bullets-mode)
-;;   :custom
-;;   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
-(defun efs/org-mode-visual-fill ()
-  (setq visual-fill-column-width 100
-        visual-fill-column-center-text t)
-  (visual-fill-column-mode 1))
-
-(use-package visual-fill-column
-  ;; :disabled
-  :hook (org-mode . efs/org-mode-visual-fill))
 
 (straight-use-package 'org-make-toc)
 (with-eval-after-load 'org
@@ -472,8 +480,9 @@
   :commands magit-status)
 
 (use-package direnv
- :config
- (direnv-mode))
+  :defer 2
+  :config
+  (direnv-mode))
 
 ;; (defun efs/lsp-mode-setup ()
 ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
@@ -667,8 +676,9 @@
 
 (use-package dired
   ;; :ensure nil
+  :defer 1
+  :after evil-collection
   :straight nil
-  :defer t
   :hook (dired-mode . dired-hide-details-mode)
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
@@ -682,15 +692,22 @@
   :config
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
-    "l" 'dired-find-file))
+    "l" 'dired-find-file)
+  )
 
 (use-package diredfl
+  :defer 1
+  :after dired
   :commands (dired dired-jump))
 
 (use-package all-the-icons-dired
+  :defer 1
+  :after dired
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-open
+  :defer 1
+  :after dired
   :custom
   (dired-open-extensions '(("png" . "imv")
                            ("mkv" . "mpv")

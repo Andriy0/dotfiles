@@ -1,6 +1,6 @@
 #+startup: overview
 #+title: Emacs Configuration
-#+property: header-args :emacs-lisp :tangle ~/dotfiles/emacs/.config/emacs/init.el :mkdirp yes
+#+property: header-args :emacs-lisp :tangle init.el :mkdirp yes
 
 * Table Of Contents
 :PROPERTIES:
@@ -9,40 +9,41 @@
 :CONTENTS:
 - [[#table-of-contents][Table Of Contents]]
 - [[#about][About]]
-- [[#basic-configuration][Basic Configuration]]
+- [[#early-init][Early Init]]
 - [[#optimizations][Optimizations]]
   - [[#garbage-collection][Garbage Collection]]
   - [[#ivy-rich-optimization][Ivy-rich optimization]]
 - [[#package-system-setup][Package System Setup]]
-- [[#font-configuration][Font Configuration]]
 - [[#keybinding-configuration][Keybinding Configuration]]
+  - [[#generalel][General.el]]
+  - [[#evil][Evil]]
 - [[#ui-configuration][UI Configuration]]
-  - [[#command-log-mode][Command Log Mode]]
+  - [[#useful-options][Useful Options]]
   - [[#color-theme][Color Theme]]
     - [[#modus-themes][Modus Themes]]
     - [[#doom-themes][Doom Themes]]
     - [[#set-up-ur-theme][Set up ur theme.]]
+  - [[#font-configuration][Font Configuration]]
+  - [[#command-log-mode][Command Log Mode]]
   - [[#better-modeline][Better Modeline]]
   - [[#which-key][Which Key]]
-  - [[#savehist-prescient][Savehist, Prescient]]
-  - [[#vertico-marginalia-conslult-savehist-prescient][Vertico, Marginalia, Conslult, savehist, Prescient]]
-  - [[#helm][Helm]]
-  - [[#ivy-swiper-counsel][Ivy, Swiper, Counsel]]
+  - [[#completions][Completions]]
+    - [[#savehist-prescient][Savehist, Prescient]]
+    - [[#vertico-marginalia-conslult-savehist-prescient][Vertico, Marginalia, Conslult, savehist, Prescient]]
+    - [[#helm][Helm]]
+    - [[#ivy-swiper-counsel][Ivy, Swiper, Counsel]]
   - [[#diminish][Diminish]]
   - [[#helpful-help-commands][Helpful Help Commands]]
   - [[#text-scaling][Text Scaling]]
   - [[#smooth-scrolling][Smooth Scrolling]]
 - [[#org-mode][Org Mode]]
-  - [[#better-font-faces][Better Font Faces]]
-  - [[#basic-config][Basic Config]]
-    - [[#nicer-heading-bullets][Nicer Heading Bullets]]
-    - [[#center-org-buffers][Center Org Buffers]]
-  - [[#create-table-of-contents-with-ease][Create table of contents with ease]]
-  - [[#configure-babel-languages][Configure Babel Languages]]
-  - [[#structure-templates][Structure Templates]]
-  - [[#auto-tangle-configuration-files][Auto-tangle Configuration Files]]
+  - [[#nicer-heading-bullets][Nicer Heading Bullets]]
+  - [[#center-org-buffers][Center Org Buffers]]
+- [[#text-find-replace-tools][Text, find, replace tools]]
+  - [[#wgrep][wgrep]]
 - [[#development][Development]]
   - [[#magit][Magit]]
+  - [[#direnv][Direnv]]
   - [[#languages][Languages]]
     - [[#ide-features-with-lsp-mode][IDE Features with lsp-mode]]
       - [[#lsp-mode][lsp-mode]]
@@ -55,6 +56,8 @@
     - [[#guile][Guile]]
     - [[#common-lisp][Common Lisp]]
     - [[#cc][C/C++]]
+    - [[#html][HTML]]
+    - [[#php][PHP]]
   - [[#eglot][Eglot]]
   - [[#company-mode][Company Mode]]
   - [[#yasnippet][Yasnippet]]
@@ -78,69 +81,39 @@
 This file contains configuration of my GNU Emacs.
 Hightly inspired by [[https://www.youtube.com/channel/UCAiiOTio8Yu69c3XnR7nQBQ][System Crafters]] YouTube channel and configs of other people.
 
-* Basic Configuration
-This section configures basic UI settings that remove unneeded elements to make Emacs look more minimal, disables and enables some small features.
+* Early Init
 
-#+begin_src emacs-lisp
-  ;; NOTE: init.el is now generated from Emacs.org.  Please edit that file
-  ;;       in Emacs and init.el will be generated automatically!
-  
-  ;; You will most likely need to adjust this font size for your system!
-  (defvar efs/default-font-size 160)
-  (defvar efs/default-variable-font-size 160)
-  
-  ;; Make frame transparency overridable
-  (defvar efs/frame-transparency '(90 . 90))
-  
-  (setq inhibit-startup-message t)
-  
-  (scroll-bar-mode -1)        ; Disable visible scrollbar
-  (tool-bar-mode -1)          ; Disable the toolbar
-  (tooltip-mode -1)           ; Disable tooltips
-  (set-fringe-mode 10)        ; Give some breathing room
-  
-  (menu-bar-mode -1)            ; Disable the menu bar
-  
-  ;; Set up the visible bell
-  (setq visible-bell nil)
-  
-  ;; Set up the ring bell
-  (setq ring-bell-function 'ignore)
-  
-  ;; (column-number-mode)
-  ;; (global-display-line-numbers-mode t)
-  ;; (menu-bar--display-line-numbers-mode-relative)
-  
-  ;; Set frame transparency
-  (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
-  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
-  ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  
-  ;; For correct fullscreen mode
-  (setq frame-resize-pixelwise t)
-  
-  ;; Disable line numbers for some modes
-  (dolist (mode '(org-mode-hook
-                  term-mode-hook
-                  shell-mode-hook
-                  vterm-mode-hook
-                  eshell-mode-hook
-                  treemacs-mode-hook))
-    (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  
-  ;; Disable blink cursor
-  (blink-cursor-mode 0)
-  
-  ;; Accept 'y' and 'n' rather than 'yes' and 'no'.
-  (defalias 'yes-or-no-p 'y-or-n-p)
-  
-  ;; Stop creating backup and autosave files.
-  (setq make-backup-files nil
-        auto-save-default nil)
-  
-  ;; (server-start)
-#+end_src
+  #+begin_src emacs-lisp :tangle early-init.el
+    ;; NOTE: early-init.el is now generated from Emacs.org.  Please edit that file
+    ;;       in Emacs and early-init.el will be generated automatically!
+
+    ;; Packages will be initialized by use-package later.
+    (setq package-enable-at-startup nil)
+    (setq package-archives nil)
+
+    ;; Defer garbage collection further back in the startup process
+    (setq gc-cons-threshold (* 50 1000 1000))
+
+    ;; Ignore X resources
+    (advice-add #'x-apply-session-resources :override #'ignore)
+    ;; TODO: Probably the better approach is:
+    ;; (setq inhibit-x-resources t)
+
+    ;; Do not resize the frame at this early stage.
+    (setq frame-inhibit-implied-resize t)
+
+    ;; Prevent unwanted runtime builds; packages are compiled ahead-of-time when
+    ;; they are installed and site files are compiled when gccemacs is installed.
+    (setq comp-deferred-compilation nil)
+
+    ;; Disable some gui elements
+    (scroll-bar-mode -1)        ; Disable visible scrollbar
+    (tool-bar-mode -1)          ; Disable the toolbar
+    (tooltip-mode -1)           ; Disable tooltips
+    (set-fringe-mode 10)        ; Give some breathing room
+
+    (menu-bar-mode -1)          ; Disable the menu bar
+  #+end_src
 
 * Optimizations
 ** Garbage Collection
@@ -149,9 +122,11 @@ This section configures basic UI settings that remove unneeded elements to make 
 I try to set it to some =higher value= because with =default= one it lags when =lsp-mode= is active and do garbage collection when Emacs =looses focus=.
 
 #+begin_src emacs-lisp
+  ;; NOTE: init.el is now generated from Emacs.org.  Please edit that file
+  ;;       in Emacs and init.el will be generated automatically!
+  
   ;; Garbage collection
-  (setq gc-cons-threshold (* 50 1000 1000))
-  ;; (add-hook 'focus-out-hook 'garbage-collect)
+  (add-hook 'focus-out-hook 'garbage-collect)
   
   ;; Use a hook so the message doesn't get clobbered by other messages.
   (add-hook 'emacs-startup-hook
@@ -211,48 +186,23 @@ Emacs has a builtin package manager but it doesn't make it easy to automatically
 #+begin_src emacs-lisp
   (defvar bootstrap-version)
   (let ((bootstrap-file
-	 (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-	(bootstrap-version 5))
+         (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+        (bootstrap-version 5))
     (unless (file-exists-p bootstrap-file)
       (with-current-buffer
-	  (url-retrieve-synchronously
-	   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	   'silent 'inhibit-cookies)
-	(goto-char (point-max))
-	(eval-print-last-sexp)))
+          (url-retrieve-synchronously
+           "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+           'silent 'inhibit-cookies)
+        (goto-char (point-max))
+        (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-  
+
   ;;  Effectively replace use-package with straight-use-package
   (straight-use-package 'use-package)
   (setq straight-use-package-by-default t)
+  (setq use-package-verbose t)
   ;; (setq straight-check-for-modifications '(check-on-save find-when-checking))
   #+end_src
-
-* Font Configuration
-
-#+begin_src emacs-lisp
-  (if (equal (system-name) "guixsd")
-    (setq my-fixed-font-name "mononoki")
-  (setq my-fixed-font-name "Mononoki Nerd Font"))
-  
-  (defun efs/set-font-faces ()
-    (message "Setting faces!")
-    (set-face-attribute 'default nil :font my-fixed-font-name :height efs/default-font-size)
-  
-    ;; Set the fixed pitch face
-    (set-face-attribute 'fixed-pitch nil :font my-fixed-font-name :height efs/default-font-size)
-  
-    ;; Set the variable pitch face
-    (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-font-size))
-  
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions
-                (lambda (frame)
-                  (setq doom-modeline-icon t)
-                  (with-selected-frame frame
-                    (efs/set-font-faces))))
-    (efs/set-font-faces))
-#+end_src
 
 * Keybinding Configuration
 This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil-mode]] for a Vi-like modal editing experience. [[https://github.com/noctuid/general.el][general.el]] is used for easy keybinding configuration that integrates well with which-key. [[https://github.com/emacs-evil/evil-collection][evil-collection]] is used to automatically configure various Emacs modes with Vi-like keybindings for evil-mode.
@@ -260,8 +210,13 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 #+begin_src emacs-lisp
   ;; Make ESC quit prompts
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+end_src
 
+** General.el
+
+#+begin_src emacs-lisp
   (use-package general
+    :defer 1
     :config
     (general-create-definer efs/leader-keys
       :keymaps '(normal insert visual emacs)
@@ -277,8 +232,14 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
       "cc" '((lambda () (interactive) (find-file "~/dotfiles/guix/.config/guix/system/config.scm")) :which-key "config.scm")
       "cd" '((lambda () (interactive) (find-file "~/dotfiles/awesome/.config/awesome/rc.lua")) :which-key "rc.lua")
       "ce" '((lambda () (interactive) (find-file "~/dotfiles/xmonad/.xmonad/Xmonad.org")) :which-key "Xmonad.org")))
+#+end_src
 
+** Evil
+
+#+begin_src emacs-lisp
   (use-package evil
+    ;; :disabled
+    :defer 1
     :init
     (setq evil-want-integration t)
     (setq evil-want-keybinding nil)
@@ -298,23 +259,73 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (evil-set-initial-state 'dashboard-mode 'normal))
 
   (use-package evil-collection
+    ;; :disabled
+    :defer 1
     :after evil
     :config
     (evil-collection-init))
 
   (use-package undo-tree
+    :disabled
+    :defer 1
     :after evil
     :config
     (global-undo-tree-mode 1))
 #+end_src
 
 * UI Configuration
-** Command Log Mode
-[[https://github.com/lewang/command-log-mode][command-log-mode]] is useful for displaying a panel showing each key binding you use in a panel on the right side of the frame. Great for live streams and screencasts!
+** Useful Options
+This section configures basic UI settings that remove unneeded elements to make Emacs look more minimal, disables and enables some small features.
 
 #+begin_src emacs-lisp
-  (use-package command-log-mode
-    :commands command-log-mode)
+  ;; You will most likely need to adjust this font size for your system!
+  (defvar efs/default-font-size 160)
+  (defvar efs/default-variable-font-size 160)
+  
+  ;; Make frame transparency overridable
+  (defvar efs/frame-transparency '(90 . 90))
+  
+  (setq inhibit-startup-message t)
+  
+  ;; Set up the visible bell
+  (setq visible-bell nil)
+  
+  ;; Set up the ring bell
+  (setq ring-bell-function 'ignore)
+  
+  ;; (column-number-mode)
+  ;; (global-display-line-numbers-mode t)
+  ;; (menu-bar--display-line-numbers-mode-relative)
+  
+  ;; Set frame transparency
+  (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
+  (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
+  ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  
+  ;; For correct fullscreen mode
+  (setq frame-resize-pixelwise t)
+  
+  ;; Disable line numbers for some modes
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  vterm-mode-hook
+                  eshell-mode-hook
+                  treemacs-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode 0))))
+  
+  ;; Disable blink cursor
+  (blink-cursor-mode 0)
+  
+  ;; Accept 'y' and 'n' rather than 'yes' and 'no'.
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  
+  ;; Stop creating backup and autosave files.
+  (setq make-backup-files nil
+        auto-save-default nil)
+  
+  ;; (server-start)
 #+end_src
 
 ** Color Theme
@@ -322,14 +333,16 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 [[https://protesilaos.com/modus-themes/][The Modus themes]] are designed for accessible readability. They conform with the highest standard for color contrast between any given combination of background and foreground values. This corresponds to the WCAG AAA standard, which specifies a minimum rate of distance in relative luminance of 7:1.
 
 #+begin_src emacs-lisp
-  (use-package modus-themes)
+  (use-package modus-themes
+    :disabled)
 #+end_src
 
 *** Doom Themes
 [[https://github.com/hlissner/emacs-doom-themes][doom-themes]] is a great set of themes with a lot of variety and support for many different Emacs modes. Taking a look at the [[https://github.com/hlissner/emacs-doom-themes/tree/screenshots][screenshots]] might help you decide which one you like best. You can also run M-x counsel-load-theme to choose between them easily.
 
 #+begin_src emacs-lisp
-  (use-package doom-themes)
+  (use-package doom-themes
+    :disabled)
 #+end_src
 
 *** Set up ur theme.
@@ -340,6 +353,40 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   ;;     (load-theme 'modus-operandi t)
   ;;   (load-theme 'modus-vivendi t))
   (load-theme 'modus-operandi t)
+#+end_src
+
+** Font Configuration
+
+ #+begin_src emacs-lisp
+   (if (equal (system-name) "guixsd")
+     (setq my-fixed-font-name "mononoki")
+   (setq my-fixed-font-name "Mononoki Nerd Font"))
+  
+   (defun efs/set-font-faces ()
+     (message "Setting faces!")
+     (set-face-attribute 'default nil :font my-fixed-font-name :height efs/default-font-size)
+  
+     ;; Set the fixed pitch face
+     (set-face-attribute 'fixed-pitch nil :font my-fixed-font-name :height efs/default-font-size)
+  
+     ;; Set the variable pitch face
+     (set-face-attribute 'variable-pitch nil :font "Cantarell" :height efs/default-font-size))
+  
+   (if (daemonp)
+       (add-hook 'after-make-frame-functions
+                 (lambda (frame)
+                   (setq doom-modeline-icon t)
+                   (with-selected-frame frame
+                     (efs/set-font-faces))))
+     (efs/set-font-faces))
+ #+end_src
+
+** Command Log Mode
+[[https://github.com/lewang/command-log-mode][command-log-mode]] is useful for displaying a panel showing each key binding you use in a panel on the right side of the frame. Great for live streams and screencasts!
+
+#+begin_src emacs-lisp
+  (use-package command-log-mode
+    :commands command-log-mode)
 #+end_src
 
 ** Better Modeline
@@ -362,7 +409,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+begin_src emacs-lisp
   (use-package which-key
-    :after evil
+    :defer 2
     ;; :init (which-key-mode)
     :diminish which-key-mode
     :custom
@@ -376,20 +423,22 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   ;;   (which-key-posframe-mode))
 #+end_src
 
-** Savehist, Prescient
+** Completions
+*** Savehist, Prescient
 
 #+begin_src emacs-lisp
   (use-package savehist
+    :defer 1
     :init
     (savehist-mode 1))
-  
+
   (use-package prescient
     :disabled
     :init
     (setq prescient-persist-mode 1))
 #+end_src
 
-** Vertico, Marginalia, Conslult, savehist, Prescient
+*** Vertico, Marginalia, Conslult, savehist, Prescient
 [[https://github.com/minad/vertico][Vertico]] provides a minimalistic vertical completion UI, which is based on the default completion system.
 
 #+begin_src emacs-lisp
@@ -421,7 +470,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (completion-in-region-function #'consult-completion-in-region))
 #+end_src
 
-** Helm
+*** Helm
 
 #+begin_src emacs-lisp
   (use-package helm
@@ -433,13 +482,15 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     :init
     (helm-mode 1))
 #+end_src
-** Ivy, Swiper, Counsel
+*** Ivy, Swiper, Counsel
 [[https://oremacs.com/swiper/][Ivy]] is an excellent completion framework for Emacs. It provides a minimal yet powerful selection menu that appears when you open files, switch buffers, and for many other tasks in Emacs. =Counsel= is a customized set of commands to replace `find-file` with `counsel-find-file`, etc which provide useful commands for each of the default completion commands. =Swiper= is an alternative to isearch that uses ivy to show an overview of all matches.
 
 [[https://github.com/Yevgnen/ivy-rich][ivy-rich]] adds extra columns to a few of the Counsel commands to provide more information about each item.
 
 #+begin_src emacs-lisp
   (use-package ivy
+    :defer 1
+    :after counsel
     :diminish ivy-mode
     :bind (("C-s" . swiper)
            ;; :map ivy-minibuffer-map
@@ -458,21 +509,22 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     ;; (setq ivy-wrap t)
     (setq ivy-use-selectable-prompt 1)
     (ivy-mode 1))
-  
+
   (use-package ivy-prescient
     :after ivy
     :custom
     (prescient-persist-mode t)
     :config
     (ivy-prescient-mode 1))
-  
+
   (use-package ivy-rich
     ;; :init (ivy-rich-mode 1)
     :after ivy
     :config
     (ivy-rich-mode 1))
-  
+
   (use-package counsel
+    :defer 1
     :bind (("C-M-j" . 'counsel-switch-buffer)
            :map minibuffer-local-map
            ("C-r" . 'counsel-minibuffer-history))
@@ -480,10 +532,10 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
     (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
     :config
     (counsel-mode 1))
-  
+
   (use-package swiper
     :commands swiper)
-  
+
   (use-package ivy-posframe
     :disabled
     :after ivy
@@ -505,7 +557,8 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 [[https://github.com/emacsmirror/diminish][This]] package implements hiding or abbreviation of the mode line displays (lighters) of minor-modes.
 
 #+begin_src emacs-lisp
-  (use-package diminish)
+  (use-package diminish
+    :defer 1)
 #+end_src
 
 ** Helpful Help Commands
@@ -513,6 +566,7 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 #+begin_src emacs-lisp
   (use-package helpful
+    :defer 2
     :custom
     (counsel-describe-function-function #'helpful-callable)
     (counsel-describe-variable-function #'helpful-variable)
@@ -554,42 +608,6 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 
-** Better Font Faces
-The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we’re editing a document in =org-mode=. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
-
-#+begin_src emacs-lisp
-  (defun efs/org-font-setup ()
-    ;; Replace list hyphen with dot
-    ;; (font-lock-add-keywords 'org-mode
-    ;;                         '(("^ *\\([-]\\) "
-    ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-  
-    ;; Set faces for heading levels
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.1)
-                    (org-level-6 . 1.1)
-                    (org-level-7 . 1.1)
-                    (org-level-8 . 1.1)))
-      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
-  
-    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
-    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
-    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
-    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
-    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
-    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
-    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
-#+end_src
-
-** Basic Config
-This section contains the basic configuration for =org-mode=.
-
 #+begin_src emacs-lisp
   (defun efs/org-mode-setup ()
     (org-indent-mode 1)
@@ -598,7 +616,7 @@ This section contains the basic configuration for =org-mode=.
     (visual-line-mode 0))
   
   (use-package org
-    ;; :defer t
+    :defer 1
     ;; :pin org
     :commands (org-capture org-agenda)
     :hook (org-mode . efs/org-mode-setup)
@@ -633,6 +651,39 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
   (use-package visual-fill-column
     ;; :disabled
     :hook (org-mode . efs/org-mode-visual-fill))
+#+end_src
+
+** Better Font Faces
+The =efs/org-font-setup= function configures various text faces to tweak the sizes of headings and use variable width fonts in most cases so that it looks more like we’re editing a document in =org-mode=. We switch back to fixed width (monospace) fonts for code blocks and tables so that they display correctly.
+
+#+begin_src emacs-lisp
+  (defun efs/org-font-setup ()
+    ;; Replace list hyphen with dot
+    ;; (font-lock-add-keywords 'org-mode
+    ;;                         '(("^ *\\([-]\\) "
+    ;;                            (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  
+    ;; Set faces for heading levels
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.1)
+                    (org-level-6 . 1.1)
+                    (org-level-7 . 1.1)
+                    (org-level-8 . 1.1)))
+      (set-face-attribute (car face) nil :font "Cantarell" :weight 'regular :height (cdr face)))
+  
+    ;; Ensure that anything that should be fixed-pitch in Org files appears that way
+    (set-face-attribute 'org-block nil    :foreground nil :inherit 'fixed-pitch)
+    (set-face-attribute 'org-table nil    :inherit 'fixed-pitch)
+    (set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+    (set-face-attribute 'org-code nil     :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-table nil    :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+    (set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+    (set-face-attribute 'org-checkbox nil  :inherit 'fixed-pitch))
 #+end_src
 
 ** Create table of contents with ease
@@ -718,8 +769,9 @@ the result is that programs started from within emacs, such as inferior shells, 
 
 #+begin_src emacs-lisp
   (use-package direnv
-   :config
-   (direnv-mode))
+    :defer 2
+    :config
+    (direnv-mode))
 #+end_src
 
 ** Languages
@@ -1075,8 +1127,9 @@ Dired is a computer program for editing file system directories. It typically ru
 #+begin_src emacs-lisp
   (use-package dired
     ;; :ensure nil
+    :defer 1
+    :after evil-collection
     :straight nil
-    :defer t
     :hook (dired-mode . dired-hide-details-mode)
     :commands (dired dired-jump)
     :bind (("C-x C-j" . dired-jump))
@@ -1090,15 +1143,22 @@ Dired is a computer program for editing file system directories. It typically ru
     :config
     (evil-collection-define-key 'normal 'dired-mode-map
       "h" 'dired-up-directory
-      "l" 'dired-find-file))
-  
+      "l" 'dired-find-file)
+    )
+
   (use-package diredfl
+    :defer 1
+    :after dired
     :commands (dired dired-jump))
-  
+
   (use-package all-the-icons-dired
+    :defer 1
+    :after dired
     :hook (dired-mode . all-the-icons-dired-mode))
-  
+
   (use-package dired-open
+    :defer 1
+    :after dired
     :custom
     (dired-open-extensions '(("png" . "imv")
                              ("mkv" . "mpv")
