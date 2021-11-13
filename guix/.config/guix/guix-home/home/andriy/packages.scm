@@ -3,9 +3,9 @@
 
 (define-public packages
   (map (compose list specification->package+output)
-       '("ungoogled-chromium-wayland"
+       '("ungoogled-chromium"
          ;; "ublock-origin-chromium"
-         "firefox-wayland"
+         "firefox"
          "telegram-desktop"
 	 "libreoffice"
 	 "gimp"
@@ -50,6 +50,8 @@
          "xdg-desktop-portal-wlr"
          "direnv"
 	 "ripgrep"
+	 "fd"
+	 "unzip"
 	 "stow"
 	 "make"
 	 "zathura" "zathura-pdf-poppler" "zathura-pdf-mupdf"

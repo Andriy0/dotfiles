@@ -12,10 +12,10 @@ set $term alacritty
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu rofi -show combi -modi combi | xargs swaymsg exec --
-# set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
+# set $menu rofi -show combi -modi combi | xargs swaymsg exec --
+set $menu wofi --show drun --allow-images --prompt "" | xargs swaymsg exec --
 
-font pango:Sans 12
+font pango:Sans 13
 
 default_border pixel 1
 default_floating_border normal

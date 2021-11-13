@@ -37,17 +37,24 @@ client.unfocused        $cl_back $cl_back $cl_fore $cl_back $cl_back
 client.urgent           $cl_urge $cl_urge $cl_fore $cl_urge $cl_urge
 
 # Workspaces
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
-
+# set $ws1 "1"
+# set $ws2 "2"
+# set $ws3 "3"
+# set $ws4 "4"
+# set $ws5 "5"
+# set $ws6 "6"
+# set $ws7 "7"
+# set $ws8 "8"
+# set $ws9 "9"
+# set $ws10 "10"
+set $WS1 "1:term"
+set $WS2 "2:ffox"
+set $WS3 "3:email"
+set $WS4 "4:file"
+set $WS5 "5:music"
+set $WS6 "6:gimp"
+set $WS7 "7:edit"
+set $WS8 "8:torr"
 
 #
 # Fonts, borders gaps and bar
