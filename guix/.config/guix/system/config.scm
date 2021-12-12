@@ -71,12 +71,12 @@
 				       (substitute-urls (append
 							 %default-substitute-urls
 							 ;; (list "https://guix.rohleder.de")
-							 (list "http://substitutes.guix.sama.re")
+							 ;; (list "http://substitutes.guix.sama.re")
 							 (list "https://mirror.brielmaier.net")))
 				       (authorized-keys (append
 							 %default-authorized-guix-keys
 							 ;; (list (local-file "guix.rohdeler.de.pub"))
-							 (list (local-file "substitutes.guix.sama.re.pub"))
+							 ;; (list (local-file "substitutes.guix.sama.re.pub"))
 							 (list (local-file "mirror.brielmaier.net.pub"))))))
 		   
 		   (network-manager-service-type config =>
@@ -111,7 +111,8 @@ EndSection
 
 (define %local-php-ini
   (plain-file "php.ini"
-	      "upload_max_filesize = 10M"))
+	      "extension = php_openssl.dll
+upload_max_filesize = 10M"))
 
 (operating-system
  ;; (kernel 
@@ -190,6 +191,7 @@ EndSection
                (group "users")
                (supplementary-groups '("wheel" "netdev"
                                        "audio" "video"
+				       "docker"
 				       "lp" "kvm"
 				       "libvirt")))
               %base-user-accounts))

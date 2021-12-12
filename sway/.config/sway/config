@@ -33,28 +33,28 @@ output * bg ~/.cache/wallpaper fill
 #
 # Touchpad
 input "2:7:SynPS/2_Synaptics_TouchPad" {
-    dwt enabled
-    tap enabled
-    natural_scroll enabled
-    middle_emulation enabled
-    tap_button_map lmr
+dwt enabled
+tap enabled
+natural_scroll enabled
+middle_emulation enabled
+tap_button_map lmr
 }
 
 # Keyboard
 input "1:1:AT_Translated_Set_2_keyboard" {
-    repeat_delay 300
-    repeat_rate 50
-    xkb_layout us,ua
-    xkb_variant nodeadkeys
-    xkb_options altwin:menu_win,grp:ctrls_toggle
+repeat_delay 300
+repeat_rate 50
+xkb_layout us,ua
+xkb_variant nodeadkeys
+xkb_options altwin:menu_win,grp:ctrls_toggle
 }
 
 ### Idle configuration
 #
 exec swayidle -w \
-         timeout 600 'swaylock -f -i ~/.cache/wallpaper --clock --indicator' \
-         timeout 630 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-         before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
+timeout 600 'swaylock -f -i ~/.cache/wallpaper --clock --indicator' \
+timeout 630 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
 
 ### Keybindings
 #
@@ -90,6 +90,7 @@ exec swayidle -w \
     bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
 
     # Screenshot
+    bindsym --to-code $mod+Shift+s exec flameshot
     bindsym --to-code $mod+s exec grim -g "$(slurp)" - | swappy -f -
 
     # Drag floating windows by holding down $mod and left mouse button.
@@ -242,5 +243,3 @@ exec redshift
 exec mako
 # exec xsettingsd
 exec nm-applet --indicator
-# exec /gnu/store/clc1pb7n8qbc7202p8n9g2pbbg13ryvi-xdg-desktop-portal-wlr-0.4.0/libexec/xdg-desktop-portal-wlr
-# exec /gnu/store/wa7isqjys60hzkcnypv8a619zk9zwzxz-xdg-desktop-portal-1.8.1/libexec/xdg-desktop-portal -r

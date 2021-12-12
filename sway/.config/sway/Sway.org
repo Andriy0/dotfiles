@@ -140,6 +140,7 @@ resumed. It will also lock your screen before your computer goes to sleep.
       bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
 
       # Screenshot
+      bindsym --to-code $mod+Shift+s exec flameshot
       bindsym --to-code $mod+s exec grim -g "$(slurp)" - | swappy -f -
 
       # Drag floating windows by holding down $mod and left mouse button.
