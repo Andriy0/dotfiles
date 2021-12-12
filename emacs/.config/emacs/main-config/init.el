@@ -507,6 +507,9 @@
 ;; (use-package lsp-ivy
 ;;   :after lsp-mode)
 
+(use-package flycheck
+  :commands (flycheck-mode))
+
 (use-package nix-mode
   :mode "//.nix//'"
   :hook (nix-mode ;; . lsp-deferred
@@ -549,10 +552,26 @@
   (setq inferior-lisp-program "sbcl --noinform --no-linedit"))
 
 (use-package web-mode
-  :mode "//.html'")
+  :mode ("//.html'" "//.php'"))
+
+(use-package emmet-mode
+  :commands (emmet-mode)
+  :hook (web-mode . emmet-mode))
 
 (use-package php-mode
-  :mode "//.php'")
+  :defer t
+  ;; :mode "//.php'"
+  )
+
+(use-package haml-mode
+  :hook (haml-mode . flycheck-mode)
+  :mode ("//.haml'"))
+
+(use-package plantuml-mode
+  :defer t
+  :config
+  (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
+  (setq plantuml-default-exec-mode 'executable))
 
 (use-package eglot
   :defer t)

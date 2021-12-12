@@ -50,6 +50,7 @@
       - [[#lsp-ui][lsp-ui]]
       - [[#lsp-treemacs][lsp-treemacs]]
       - [[#lsp-ivy][lsp-ivy]]
+    - [[#flycheck][Flycheck]]
     - [[#nix][Nix]]
     - [[#lua][Lua]]
     - [[#haskell][Haskell]]
@@ -57,7 +58,9 @@
     - [[#common-lisp][Common Lisp]]
     - [[#cc][C/C++]]
     - [[#html][HTML]]
+      - [[#emmet][Emmet]]
     - [[#php][PHP]]
+    - [[#haml][HAML]]
   - [[#eglot][Eglot]]
   - [[#company-mode][Company Mode]]
   - [[#yasnippet][Yasnippet]]
@@ -835,6 +838,12 @@ Try these commands with =M-x= :
 ;; (use-package lsp-ivy
 ;;   :after lsp-mode)
 #+end_src
+*** Flycheck
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :commands (flycheck-mode))
+#+end_src
 
 *** Nix
 Nix expressions language used in Nix package manager and NixOS.
@@ -905,14 +914,55 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 
 #+begin_src emacs-lisp
   (use-package web-mode
-    :mode "//.html'")
+    :mode ("//.html'" "//.php'"))
+#+end_src
+
+**** Emmet
+[[https://emmet.io/][Emmet]] is a plugin for many popular text editors which greatly improves HTML & CSS workflow
+
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :commands (emmet-mode)
+    :hook (web-mode . emmet-mode))
 #+end_src
 
 *** PHP
 
 #+begin_src emacs-lisp
   (use-package php-mode
-    :mode "//.php'")
+    :defer t
+    ;; :mode "//.php'"
+    )
+#+end_src
+
+*** HAML
+
+#+begin_src emacs-lisp
+  (use-package haml-mode
+    :hook (haml-mode . flycheck-mode)
+    :mode ("//.haml'"))
+#+end_src
+
+** Plantuml Mode
+[[https://github.com/skuro/plantuml-mode][Plantuml-mode]] is emacs major mode for plantuml.
+[[https://plantuml.com/][PlantUML]] is a component that allows to quickly write:
+
+    - Sequence diagram
+    - Usecase diagram
+    - Class diagram
+    - Object diagram
+    - Activity diagram (here is the legacy syntax)
+    - Component diagram
+    - Deployment diagram
+    - State diagram
+    - Timing diagram
+
+#+begin_src emacs-lisp
+  (use-package plantuml-mode
+    :defer t
+    :config
+    (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
+    (setq plantuml-default-exec-mode 'executable))
 #+end_src
 
 ** Eglot
