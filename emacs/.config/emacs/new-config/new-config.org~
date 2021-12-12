@@ -1,0 +1,39 @@
+#+startup: overview
+#+title: My New Emacs Configuration
+#+property: header-args :emacs-lisp :tangle init.el
+
+* About
+  This file is my attempt to rewrite my emacs config.
+  It tangles to init.el and early-init.el
+
+* Early Init
+
+  #+begin_src emacs-lisp :tangle early-init.el
+    (scroll-bar-mode -1)
+    (tool-bar-mode -1)
+    (tooltip-mode -1)
+    (set-fringe-mode 10)
+    (setq gc-cons-threshold (* 50 1000 1000))
+  #+end_src
+
+* Optimizations and Startup
+
+  #+begin_src emacs-lisp
+    (add-hook 'focus-out-hook 'garbage-collect)
+    (add-hook 'emacs-startup-hook
+	       (lambda ()
+		 (message "Emacs ready in %s with %d garbage collections."
+			  (format "%.2f seconds"
+				  (float-time
+				   (time-subtract after-init-time before-init-time)))
+			  gcs-done)))
+
+     ;; Return gc-threshold to normal value
+     (run-with-idle-timer
+      5 nil
+      (lambda ()
+	(setq gc-cons-threshold (* 2 1000 1000))
+	(message "gc-cons-threshold restored to %s"
+		 gc-cons-threshold)))
+
+  #+end_src
