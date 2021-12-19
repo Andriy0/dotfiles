@@ -56,12 +56,18 @@ ctl_type.pipewire {
     (stop  #~(make-kill-destructor))
     (start #~(make-forkexec-constructor
               (list #$(file-append pipewire-0.3 "/bin/pipewire")))))
+   ;; (shepherd-service
+   ;;  (requirement '(pipewire))
+   ;;  (provision '(pipewire-media-session))
+   ;;  (stop  #~(make-kill-destructor))
+   ;;  (start #~(make-forkexec-constructor
+   ;;            (list #$(file-append pipewire-0.3 "/bin/pipewire-media-session")))))
    (shepherd-service
     (requirement '(pipewire))
-    (provision '(pipewire-media-session))
+    (provision '(wireplumber))
     (stop  #~(make-kill-destructor))
     (start #~(make-forkexec-constructor
-              (list #$(file-append pipewire-0.3 "/bin/pipewire-media-session")))))
+              (list #$(file-append wireplumber "/bin/wireplumber")))))
    (shepherd-service
     (requirement '(pipewire))
     (provision '(pipewire-pulse))
@@ -85,9 +91,9 @@ ctl_type.pipewire {
           (service-extension
            home-environment-variables-service-type
            home-pipewire-environment-variables-service)
-          ;; (service-extension
-          ;;  home-profile-service-type
-          ;;  (const (list pipewire-0.3 pulseaudio)))
+          (service-extension
+           home-profile-service-type
+           (const (list pipewire-0.3 wireplumber pulseaudio)))
 	  ))
    (default-value #f)
    (description "run pipewire and stuff")))
