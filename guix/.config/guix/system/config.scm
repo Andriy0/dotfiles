@@ -130,7 +130,7 @@ upload_max_filesize = 10M"))
  ;;        (inferior-for-channels channels)))
  ;;    (first (lookup-inferior-packages inferior "linux" "5.14.3"))))
  (kernel linux)
- (initrd microcode-initrd)
+ ;; (initrd microcode-initrd)
  (firmware (list linux-firmware))
 
  (host-name "guixsd")
@@ -229,6 +229,7 @@ upload_max_filesize = 10M"))
 		    "pipewire"
 		    "tlp" "gvfs" "cpupower"
 		    "acpi"
+		    "openssl"
                     ;; for HTTPS access
                     "nss-certs"))
                    %base-packages))
