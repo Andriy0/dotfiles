@@ -3,9 +3,10 @@
 
 (define-public packages
   (map (compose list specification->package+output)
-       '("ungoogled-chromium"
+       '(
+	 ;; "ungoogled-chromium"
          ;; "ublock-origin-chromium"
-         "firefox"
+         ;; "firefox"
          "telegram-desktop"
 	 "libreoffice"
 	 "gimp"
@@ -48,6 +49,8 @@
 	 "gnome-backgrounds"
          ;; "git:send-email"
 	 ;; "xsettingsd"
+	 "glibc"
+	 "glibc-locales"
 	 "glib:bin"
          "xdg-desktop-portal"
          "xdg-desktop-portal-wlr"
@@ -59,6 +62,7 @@
 	 "stow"
 	 "make"
 	 "htop"
+	 "tree"
 	 "sbcl"
 	 "zathura" "zathura-pdf-poppler" "zathura-pdf-mupdf"
 	 "openssh"
