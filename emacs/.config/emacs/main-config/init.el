@@ -535,21 +535,21 @@
 (use-package geiser-guile
   :after geiser)
 
-;; (if (equal (system-name) "guixsd")
-;;     (use-package slime
-;;       :straight nil
-;;       :commands slime
-;;       :config
-;;       (setq lisp-inferior-program "sbcl --noinform --no-linedit"))
-;;   (use-package slime
-;;     :commands slime
-;;     :config
-;;     (setq lisp-inferior-program "sbcl --noinform --no-linedit")))
-
 (use-package slime
   :commands slime
   :config
   (setq inferior-lisp-program "sbcl --noinform --no-linedit"))
+
+(use-package slime-company
+  :after '(slime company))
+
+(use-package slime-docker
+  :defer t
+  :config
+  (setq slime-docker-image-name "my-sbcl")
+  (setq slime-docker-program "sbcl")
+  (setq slime-docker-ports '((:host-port 8080 :container-port 8080)))
+  (setq slime-docker-mounts `(((,(expand-file-name "~/proj/lisp/") . "/home/cl/")))))
 
 (use-package web-mode
   :mode ("//.html'" "//.php'"))
