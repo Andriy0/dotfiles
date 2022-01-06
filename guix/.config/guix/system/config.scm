@@ -23,6 +23,7 @@
  (gnu services databases)
  (gnu services web)
  (gnu services docker)
+ (gnu services nfs)
  (gnu packages)
  (gnu packages vim)
  (gnu packages pulseaudio)
@@ -70,14 +71,10 @@
 				       (inherit config)
 				       (substitute-urls (append
 							 %default-substitute-urls
-							 ;; (list "https://guix.rohleder.de")
-							 ;; (list "http://substitutes.guix.sama.re")
-							 (list "https://mirror.brielmaier.net")))
+							 (list "https://substitutes.nonguix.org")))
 				       (authorized-keys (append
 							 %default-authorized-guix-keys
-							 ;; (list (local-file "guix.rohdeler.de.pub"))
-							 ;; (list (local-file "substitutes.guix.sama.re.pub"))
-							 (list (local-file "mirror.brielmaier.net.pub"))))))
+							 (list (local-file "./substitutes.nonguix.org.pub"))))))
 		   
 		   (network-manager-service-type config =>
 						 (network-manager-configuration (inherit config)
@@ -230,6 +227,7 @@ upload_max_filesize = 10M"))
 		    "tlp" "gvfs" "cpupower"
 		    "acpi"
 		    "openssl"
+		    "ovmf"
                     ;; for HTTPS access
                     "nss-certs"))
                    %base-packages))
@@ -322,6 +320,11 @@ upload_max_filesize = 10M"))
           (socket "/var/run/php-fpm.sock")
           (socket-group "httpd")
 	  (php-ini-file %local-php-ini)))
+   (service nfs-service-type
+	    (nfs-configuration
+	     (exports
+	      '(("/home/andriy/proj"
+		 "*(rw,sync,no_root_squash,no_subtree_check)")))))
    (service docker-service-type)
    (remove (lambda (service)
 	      (eq? (service-kind service) gdm-service-type))
