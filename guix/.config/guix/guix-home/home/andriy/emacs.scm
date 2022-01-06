@@ -26,6 +26,7 @@
             (home-emacs-configuration
              (package emacs-next-pgtk)
              (rebuild-elisp-packages? #t)
+	     (server-mode? #f)
              ;; (init-el
              ;;  `(,(slurp-file-gexp (local-file "/home/andriy/dotfiles/emacs/.config/emacs/init.el"))))
              (elisp-packages packages)))))
