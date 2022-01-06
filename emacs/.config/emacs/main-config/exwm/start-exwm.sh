@@ -20,5 +20,5 @@ xscreensaver --no-splash &
 
 # Fire it up
 xhost +SI:localuser:$USER
-exec dbus-launch --exit-with-session emacs-28.0.50 -mm -l ~/.config/emacs/desktop.el
+exec dbus-launch --exit-with-session emacs-28.0.50 -mm -l ~/.config/emacs/main-config/desktop.el
 # exec dbus-launch --exit-with-session emacsclient --eval "(exwm-init)" -c -F '((fullscreen . fullboth))'
