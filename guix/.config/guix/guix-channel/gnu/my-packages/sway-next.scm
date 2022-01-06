@@ -22,6 +22,9 @@
   #:use-module (gnu packages gnome)
   #:use-module (gnu packages samba)
   #:use-module (gnu packages cmake)
+  #:use-module (gnu packages avahi)
+  #:use-module (gnu packages audio)
+  #:use-module (gnu packages vulkan)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
@@ -229,3 +232,37 @@
        ("pkg-config" ,pkg-config)
        ("scdoc" ,scdoc)
        ("wayland-protocols" ,wayland-protocols-next)))))
+
+(define-public pipewire-next
+  (package
+    (inherit pipewire)
+    (name "pipewire-next")
+    (version "0.3.40")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/PipeWire/pipewire")
+                    (commit version)))
+              (file-name (git-file-name name version))
+              (sha256
+               (base32
+                "1c6gni23l5w3ghwqnfs712kjj6l1825f0ib8a6r2xc1ymr0sx3kr"))))
+    (arguments
+     '(#:configure-flags
+       (list (string-append "-Dudevrulesdir=" (assoc-ref %outputs "out")
+                            "/lib/udev/rules.d")
+             "-Dsystemd=disabled"
+             "-Dsession-managers=[]")
+       #:phases
+       (modify-phases %standard-phases
+         ;; Skip shrink-runpath, otherwise validate-runpath fails.
+         (delete 'shrink-runpath))))
+    (inputs
+     (append (package-inputs pipewire)
+             `(("avahi" ,avahi)
+               ("bluez" ,bluez)
+               ("jack" ,jack-2)
+               ("ldacbt" ,ldacbt)
+               ("pulseaudio" ,pulseaudio)
+               ("vulkan-loader" ,vulkan-loader)
+               ("vulkan-headers" ,vulkan-headers))))))
