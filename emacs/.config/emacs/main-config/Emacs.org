@@ -914,6 +914,7 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 
 #+begin_src emacs-lisp
   (use-package web-mode
+    :hook (web-mode . company-mode)
     :mode 
     ("//.html'" "//.php'" "//.erb'")
     :config
@@ -938,6 +939,7 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 #+begin_src emacs-lisp
   (use-package css-mode
     :defer t
+    :hook (css-mode . company-mode)
     :config
     (setq css-indent-offset 2))
 #+end_src
@@ -963,7 +965,9 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 
 #+begin_src emacs-lisp
   (use-package haml-mode
-    :hook (haml-mode . flycheck-mode)
+    :hook 
+    (haml-mode . flycheck-mode)
+    (haml-mode . company-mode)
     :mode ("//.haml'"))
 #+end_src
 
