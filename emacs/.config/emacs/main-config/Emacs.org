@@ -967,6 +967,16 @@ Set guile as default scheme dialect to avoid annoying dialogs.
     :mode ("//.haml'"))
 #+end_src
 
+*** SLIM
+
+#+begin_src emacs-lisp
+  (use-package slim-mode
+    :hook 
+    (slim-mode . flycheck-mode)
+    (slim-mode . company-mode)
+    :mode ("//.slim"))
+#+end_src
+
 *** YAML
 The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files in the YAML data serialization format. 
 
@@ -1099,14 +1109,6 @@ Emacs’ built in commenting functionality =comment-dwim= (usually bound to =M-;
 ;;     (add-hook 'common-lisp-mode-hook #'parinfer-mode)
 ;;     (add-hook 'scheme-mode-hook #'parinfer-mode)
 ;;     (add-hook 'lisp-mode-hook #'parinfer-mode)))
-#+end_src
-
-*** SLIM
-
-#+begin_src emacs-lisp
-  (use-package slim-mode
-    :hook (slim-mode . flycheck-mode)
-    :mode ("//.slim"))
 #+end_src
 
 * Terminals
