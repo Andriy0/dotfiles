@@ -951,6 +951,14 @@ Set guile as default scheme dialect to avoid annoying dialogs.
     )
 #+end_src
 
+*** Ruby
+
+#+begin_src emacs-lisp
+  (use-package ruby-mode
+    :defer t
+    :hook (ruby-mode . company-mode))
+#+end_src
+
 *** HAML
 
 #+begin_src emacs-lisp
