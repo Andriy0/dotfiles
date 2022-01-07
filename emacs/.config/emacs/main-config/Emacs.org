@@ -1132,7 +1132,7 @@ We also use [[https://github.com/sebastiencs/company-box][company-box]] to furth
           ;;  ("<tab>" . company-indent-or-complete-common))
     :custom
     (company-tooltip-limit 5)
-    (company-minimum-prefix-length 3)
+    (company-minimum-prefix-length 2)
     (company-idle-delay 0.3)
     (company-selection-wrap-around t)
     (company-require-match 'never))
