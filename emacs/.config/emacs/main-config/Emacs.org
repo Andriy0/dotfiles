@@ -933,6 +933,15 @@ Set guile as default scheme dialect to avoid annoying dialogs.
     :hook (web-mode . emmet-mode))
 #+end_src
 
+*** Css-mode
+
+#+begin_src emacs-lisp
+  (use-package css-mode
+    :defer t
+    :config
+    (setq css-indent-offset 2))
+#+end_src
+
 *** PHP
 
 #+begin_src emacs-lisp
