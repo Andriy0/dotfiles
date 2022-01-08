@@ -986,6 +986,7 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
 
 #+begin_src emacs-lisp
   (use-package yaml-mode
+    :hook (yaml-mode . company-mode)
     :mode ("//.yaml'"))
 #+end_src
 
