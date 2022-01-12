@@ -552,22 +552,49 @@
   (setq slime-docker-mounts `(((,(expand-file-name "~/proj/lisp/") . "/home/cl/")))))
 
 (use-package web-mode
-  :mode ("//.html'" "//.php'"))
+  :hook (web-mode . company-mode)
+  :mode 
+  ("//.html'" "//.php'" "//.erb'")
+  :config
+  (setq web-mode-markup-indent-offet 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-attr-indent-offset 2)
+  (setq web-mode-attr-value-indent-offset 2)
+  (setq web-mode-sql-indent-offset 2))
 
 (use-package emmet-mode
   :commands (emmet-mode)
   :hook (web-mode . emmet-mode))
+
+(use-package css-mode
+  :defer t
+  :hook (css-mode . company-mode)
+  :config
+  (setq css-indent-offset 2))
 
 (use-package php-mode
   :defer t
   ;; :mode "//.php'"
   )
 
+(use-package ruby-mode
+  :defer t
+  :hook (ruby-mode . company-mode))
+
 (use-package haml-mode
-  :hook (haml-mode . flycheck-mode)
+  :hook 
+  (haml-mode . flycheck-mode)
+  (haml-mode . company-mode)
   :mode ("//.haml'"))
 
+(use-package slim-mode
+  :hook 
+  (slim-mode . flycheck-mode)
+  (slim-mode . company-mode)
+  :mode ("//.slim"))
+
 (use-package yaml-mode
+  :hook (yaml-mode . company-mode)
   :mode ("//.yaml'"))
 
 (use-package plantuml-mode
@@ -590,83 +617,7 @@
         ;;  ("<tab>" . company-indent-or-complete-common))
   :custom
   (company-tooltip-limit 5)
-  (company-minimum-prefix-length 3)
-  (company-idle-delay 0.3)
-  (company-selection-wrap-around t)
-  (company-require-match 'never))
-
-;; (use-package company-box
-  ;; :hook (company-mode . company-box-mode))
-
-;; Collection of snippets
-(use-package yasnippet-snippets
-  :defer t)
-
-(use-package yasnippet                  ; Snippets
-  :defer t
-  ;; :ensure t
-  :config
-  (setq
-   yas-verbosity 1                      ; No need to be so verbose
-   yas-wrap-around-region t)
-
-  (with-eval-after-load 'yasnippet
-    (setq yas-snippet-dirs '(yasnippet-snippets-dir)))
-
-  (yas-reload-all)
-  ;; (yas-global-mode)
-  )
-
-(use-package evil-nerd-commenter
-  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
-
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode))
-
-;; (use-package parinfer
-;;   :bind
-;;   ("C-," . parinfer-toggle-mode)
-;;   :init
-;;   (progn
-;;     (setq parinfer-extensions
-;;           '(defaults       ; should be included.
-;;             pretty-parens  ; different paren styles for different modes.
-;;             evil           ; If you use Evil.
-;;             ;; lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-;;             ;; paredit        ; Introduce some paredit commands.
-;;             smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-;;             smart-yank))   ; Yank behavior depend on mode.
-;;     (add-hook 'clojure-mode-hook #'parinfer-mode)
-;;     (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-;;     (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-;;     (add-hook 'scheme-mode-hook #'parinfer-mode)
-;;     (add-hook 'lisp-mode-hook #'parinfer-mode)))
-
-(use-package slim-mode
-  :hook (slim-mode . flycheck-mode)
-  :mode ("//.slim"))
-
-(use-package plantuml-mode
-  :defer t
-  :config
-  (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
-  (setq plantuml-default-exec-mode 'executable))
-
-(use-package eglot
-  :defer t)
-
-(use-package company
-  ;; :ensure t
-  :defer t
-  ;; :after lsp-mode
-  ;; :hook (after-init . global-company-mode)
-  :bind (:map company-active-map
-         ("<tab>" . company-complete-selection))
-        ;; (:map lsp-mode-map
-        ;;  ("<tab>" . company-indent-or-complete-common))
-  :custom
-  (company-tooltip-limit 5)
-  (company-minimum-prefix-length 3)
+  (company-minimum-prefix-length 2)
   (company-idle-delay 0.3)
   (company-selection-wrap-around t)
   (company-require-match 'never))
