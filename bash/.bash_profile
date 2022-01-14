@@ -9,7 +9,6 @@ source $HOME/.nix-profile/etc/profile.d/nix.sh
 export PATH="$PATH:$HOME/.local/bin"
 export QT_QPA_PLATFORMTHEME="qt5ct"
 export XDG_DATA_DIRS="$XDG_DATA_DIRS\
-:$HOME/.local/share/flatpak/exports/share\
 :$HOME/.local/share/themes\
 :$HOME/.local/share/icons"
 
