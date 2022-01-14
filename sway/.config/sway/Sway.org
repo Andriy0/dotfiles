@@ -275,8 +275,6 @@ resumed. It will also lock your screen before your computer goes to sleep.
   ### Window rules
   #
   for_window [title="Dbeaver" app_id="java"] floating enable
-  # for_window [title="Virtual Machine Manager" app_id="..virt-manager-real-real"] floating enable
-  # for_window [app_id="pavucontrol"] floating enable
   for_window [title="Поділіться своєю новою зустріччю"] floating enable
   for_window [title="Sharing Indicator"] floating enable
   for_window [title="Picture-in-Picture"] floating enable
