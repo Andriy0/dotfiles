@@ -953,6 +953,16 @@ Set guile as default scheme dialect to avoid annoying dialogs.
     )
 #+end_src
 
+*** JavaScript
+
+#+begin_src emacs-lisp
+  (use-package js
+    :defer t
+    :hook (js-mode . company-mode)
+    :config
+    (setq js-indent-level 2))
+#+end_src
+
 *** Ruby
 
 #+begin_src emacs-lisp

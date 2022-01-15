@@ -577,6 +577,12 @@
   ;; :mode "//.php'"
   )
 
+(use-package js
+  :defer t
+  :hook (js-mode . company-mode)
+  :config
+  (setq js-indent-level 2))
+
 (use-package ruby-mode
   :defer t
   :hook (ruby-mode . company-mode))
