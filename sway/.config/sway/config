@@ -241,4 +241,3 @@ exec redshift
 exec mako
 # exec xsettingsd
 exec nm-applet --indicator
-exec emacs --daemon
