@@ -6,6 +6,8 @@
   #:use-module (gnu packages emacs)
   #:use-module (rde packages)
 
+  #:use-module (home andriy emacs-service)
+
   #:use-module (gnu home services)
   #:use-module (gnu home-services emacs)
   #:use-module (gnu home-services-utils))
@@ -22,6 +24,7 @@
 
 (define-public services
   (list
+   ;; (service my-emacs-service-type)
    (service home-emacs-service-type
             (home-emacs-configuration
              (package emacs-next-pgtk)
