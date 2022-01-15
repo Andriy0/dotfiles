@@ -328,4 +328,5 @@ resumed. It will also lock your screen before your computer goes to sleep.
   exec mako
   # exec xsettingsd
   exec nm-applet --indicator
+  exec emacs --daemon
 #+end_src
