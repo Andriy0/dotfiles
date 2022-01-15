@@ -50,24 +50,27 @@ ctl_type.pipewire {
                         (string-append
                          "--address=" "unix:path="
                          (getenv "XDG_RUNTIME_DIR") "/dbus.sock")))))
+   
    (shepherd-service
     (requirement '(dbus-home))
     (provision '(pipewire))
     (stop  #~(make-kill-destructor))
     (start #~(make-forkexec-constructor
               (list #$(file-append pipewire-0.3 "/bin/pipewire")))))
-   ;; (shepherd-service
-   ;;  (requirement '(pipewire))
-   ;;  (provision '(pipewire-media-session))
-   ;;  (stop  #~(make-kill-destructor))
-   ;;  (start #~(make-forkexec-constructor
-   ;;            (list #$(file-append pipewire-0.3 "/bin/pipewire-media-session")))))
+   
    (shepherd-service
     (requirement '(pipewire))
     (provision '(wireplumber))
-    (stop  #~(make-kill-destructor))
     (start #~(make-forkexec-constructor
-              (list #$(file-append wireplumber "/bin/wireplumber")))))
+              (list #$(file-append (@@ (gnu packages glib ) dbus) "/bin/dbus-run-session")
+		    #$(file-append wireplumber "/bin/wireplumber"))
+	      #:log-file (string-append
+			  (or (getenv "XDG_LOG_HOME")
+			      (format #f "~a/.local/var/log"
+				      (getenv "HOME")))
+			  "/wireplumber.log")))
+    (stop  #~(make-kill-destructor)))
+   
    (shepherd-service
     (requirement '(pipewire))
     (provision '(pipewire-pulse))
