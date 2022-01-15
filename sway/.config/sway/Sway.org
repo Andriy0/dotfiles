@@ -326,6 +326,5 @@ resumed. It will also lock your screen before your computer goes to sleep.
   exec_always ~/dotfiles/waybar/.config/waybar/launch.sh
   exec redshift
   exec mako
-  # exec xsettingsd
   exec nm-applet --indicator
 #+end_src

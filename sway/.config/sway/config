@@ -239,5 +239,4 @@ exec_always {
 exec_always ~/dotfiles/waybar/.config/waybar/launch.sh
 exec redshift
 exec mako
-# exec xsettingsd
 exec nm-applet --indicator
