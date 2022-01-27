@@ -603,11 +603,22 @@
   :hook (yaml-mode . company-mode)
   :mode ("//.yaml'"))
 
+(use-package markdown-mode
+  :hook (markdown-mode . company-mode)
+  :mode ("//.md'"))
+
 (use-package plantuml-mode
   :defer t
   :config
   (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
   (setq plantuml-default-exec-mode 'executable))
+
+(use-package grip-mode
+  :defer t
+  :config
+  (setq grip-binary-path "~/.guix-profile/bin/grip")
+  (setq grip-url-browser "firefox")
+  (setq grip-update-after-change nil))
 
 (use-package eglot
   :defer t)

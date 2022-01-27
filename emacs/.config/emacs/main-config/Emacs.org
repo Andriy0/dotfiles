@@ -1000,6 +1000,14 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
     :mode ("//.yaml'"))
 #+end_src
 
+*** Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :hook (markdown-mode . company-mode)
+    :mode ("//.md'"))
+#+end_src
+
 ** Plantuml Mode
 [[https://github.com/skuro/plantuml-mode][Plantuml-mode]] is emacs major mode for plantuml.
 [[https://plantuml.com/][PlantUML]] is a component that allows to quickly write:
@@ -1020,6 +1028,17 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
     :config
     (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
     (setq plantuml-default-exec-mode 'executable))
+#+end_src
+
+** Grip Mode
+
+#+begin_src emacs-lisp
+  (use-package grip-mode
+    :defer t
+    :config
+    (setq grip-binary-path "~/.guix-profile/bin/grip")
+    (setq grip-url-browser "firefox")
+    (setq grip-update-after-change nil))
 #+end_src
 
 ** Eglot
