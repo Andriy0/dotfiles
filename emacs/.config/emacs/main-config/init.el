@@ -686,6 +686,9 @@
 ;;     (add-hook 'scheme-mode-hook #'parinfer-mode)
 ;;     (add-hook 'lisp-mode-hook #'parinfer-mode)))
 
+(use-package highlight-indent-guides
+  :commands (highlight-indent-guides))
+
 (use-package term
   :commands term
   :config
