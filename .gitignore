@@ -3,3 +3,4 @@ xmonadctl
 *.o
 *.hi
 history
+fish
