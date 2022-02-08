@@ -278,6 +278,7 @@ resumed. It will also lock your screen before your computer goes to sleep.
   for_window [title="Поділіться своєю новою зустріччю"] floating enable
   for_window [title="Sharing Indicator"] floating enable
   for_window [title="Picture-in-Picture"] floating enable
+  for_window [title="Figure*"] floating enable
 #+end_src
 
 * GTK THEMING
