@@ -94,7 +94,8 @@ before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
     bindsym --locked $mod+F8 exec playerctl next
 
     # Lock the screen
-    bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
+    # bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper --clock --indicator
+    bindsym --to-code $mod+x exec swaylock -f -i ~/.cache/wallpaper
 
     # Screenshot
     bindsym --to-code $mod+Shift+s exec flameshot
