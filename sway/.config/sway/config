@@ -9,6 +9,7 @@ set $up k
 set $right l
 # Your preferred terminal emulator
 set $term kitty
+set $scratchpad_term $term --class scratchpad_term
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
@@ -33,20 +34,22 @@ output * bg ~/.cache/wallpaper fill
 #
 # Touchpad
 input "2:7:SynPS/2_Synaptics_TouchPad" {
-dwt enabled
-tap enabled
-natural_scroll enabled
-middle_emulation enabled
-tap_button_map lmr
+  drag enabled
+  drag_lock enabled
+  dwt enabled
+  natural_scroll enabled
+  middle_emulation enabled
+  tap enabled
+  tap_button_map lrm
 }
 
 # Keyboard
 input "1:1:AT_Translated_Set_2_keyboard" {
-repeat_delay 300
-repeat_rate 50
-xkb_layout us,ua
-xkb_variant nodeadkeys
-xkb_options altwin:menu_win,grp:ctrls_toggle
+  repeat_delay 300
+  repeat_rate 50
+  xkb_layout us,ua
+  xkb_variant nodeadkeys
+  xkb_options altwin:menu_win,grp:ctrls_toggle
 }
 
 ### Idle configuration
@@ -62,6 +65,10 @@ before-sleep 'swaylock -f -i ~/.cache/wallpaper --clock --indicator'
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+    # Find or start a scratchpad terminal
+    bindsym --to-code $mod+t \
+      exec swaymsg [app_id="scratchpad_term"] scratchpad show || \
+      exec $scratchpad_term
 
     # Kill focused window
     bindsym --to-code $mod+q kill
@@ -222,9 +229,17 @@ bindsym --to-code $mod+r mode "resize"
 #
 for_window [title="Dbeaver" app_id="java"] floating enable
 for_window [title="Поділіться своєю новою зустріччю"] floating enable
-for_window [title="Sharing Indicator"] floating enable
+for_window [title="Sharing Indicator"] {
+  floating enable
+  move scratchpad
+}
 for_window [title="Picture-in-Picture"] floating enable
 for_window [title="Figure*"] floating enable
+for_window [app_id="scratchpad_term"] {
+  move scratchpad
+  resize set 720 400
+  scratchpad show
+}
 
 set $gnome-schema org.gnome.desktop.interface
 
