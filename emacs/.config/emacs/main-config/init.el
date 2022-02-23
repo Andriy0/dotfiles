@@ -209,13 +209,11 @@
 (use-package command-log-mode
   :commands command-log-mode)
 
-(use-package all-the-icons
-  :disabled)
+(use-package all-the-icons)
 
 (use-package doom-modeline
-  :disabled
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 15)))
+  :config (setq doom-modeline-height 10))
 
 (use-package which-key
   :defer 2

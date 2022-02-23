@@ -396,13 +396,11 @@ This section configures basic UI settings that remove unneeded elements to make 
 *NOTE:* The first time you load your configuration on a new machine, you’ll need to run `M-x all-the-icons-install-fonts` so that mode line icons display correctly.
 
 #+begin_src emacs-lisp
-  (use-package all-the-icons
-    :disabled)
+  (use-package all-the-icons)
 
   (use-package doom-modeline
-    :disabled
     :init (doom-modeline-mode 1)
-    :custom ((doom-modeline-height 15)))
+    :config (setq doom-modeline-height 10))
 #+end_src
 
 ** Which Key
