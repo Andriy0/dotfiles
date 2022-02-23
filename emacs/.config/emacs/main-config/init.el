@@ -186,9 +186,7 @@
 ;;   (load-theme 'modus-vivendi t))
 (load-theme 'modus-operandi t)
 
-(if (equal (system-name) "guixsd")
-  (setq my-fixed-font-name "mononoki")
-(setq my-fixed-font-name "Mononoki Nerd Font"))
+(setq my-fixed-font-name "mononoki Nerd Font")
 
 (defun efs/set-font-faces ()
   (message "Setting faces!")
@@ -751,14 +749,15 @@
   :hook (dired-mode . dired-hide-details-mode)
   :commands (dired dired-jump)
   :bind (("C-x C-j" . dired-jump))
-  :custom
-  (dired-async-mode t)
-  (dired-dwim-target t)
-  (dired-listing-switches "-agho --group-directories-first")
-  (wdired-allow-to-change-permissions t)
-  (wdired-create-parent-directories t)
-  (diredfl-global-mode t)
   :config
+  (setq dired-async-mode t)
+  (setq dired-dwim-target t)
+  (when (eq system-type 'darwin)
+    (setq insert-directory-program "/usr/local/bin/gls"))
+  (setq dired-listing-switches "-agho --group-directories-first")
+  (setq wdired-allow-to-change-permissions t)
+  (setq wdired-create-parent-directories t)
+  (setq diredfl-global-mode t)
   (evil-collection-define-key 'normal 'dired-mode-map
     "h" 'dired-up-directory
     "l" 'dired-find-file)
