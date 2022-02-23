@@ -27,8 +27,8 @@
   - [[#command-log-mode][Command Log Mode]]
   - [[#better-modeline][Better Modeline]]
   - [[#which-key][Which Key]]
+  - [[#savehist-prescient][Savehist, Prescient]]
   - [[#completions][Completions]]
-    - [[#savehist-prescient][Savehist, Prescient]]
     - [[#vertico-marginalia-conslult-savehist-prescient][Vertico, Marginalia, Conslult, savehist, Prescient]]
     - [[#helm][Helm]]
     - [[#ivy-swiper-counsel][Ivy, Swiper, Counsel]]
@@ -57,16 +57,25 @@
     - [[#guile][Guile]]
     - [[#common-lisp][Common Lisp]]
     - [[#cc][C/C++]]
-    - [[#html][HTML]]
+    - [[#web-mode][Web-mode]]
       - [[#emmet][Emmet]]
+    - [[#css-mode][Css-mode]]
     - [[#php][PHP]]
+    - [[#javascript][JavaScript]]
+    - [[#ruby][Ruby]]
     - [[#haml][HAML]]
+    - [[#slim][SLIM]]
+    - [[#yaml][YAML]]
+    - [[#markdown][Markdown]]
+  - [[#plantuml-mode][Plantuml Mode]]
+  - [[#grip-mode][Grip Mode]]
   - [[#eglot][Eglot]]
   - [[#company-mode][Company Mode]]
   - [[#yasnippet][Yasnippet]]
   - [[#commenting][Commenting]]
   - [[#rainbow-delimiters][Rainbow Delimiters]]
   - [[#parinfer][Parinfer]]
+  - [[#highlight-indent-guides-mode][Highlight Indent Guides Mode]]
 - [[#terminals][Terminals]]
   - [[#term-mode][term-mode]]
     - [[#better-term-mode-colors][Better term-mode colors]]
@@ -284,31 +293,31 @@ This section configures basic UI settings that remove unneeded elements to make 
   ;; You will most likely need to adjust this font size for your system!
   (defvar efs/default-font-size 160)
   (defvar efs/default-variable-font-size 160)
-  
+
   ;; Make frame transparency overridable
   (defvar efs/frame-transparency '(90 . 90))
-  
+
   (setq inhibit-startup-message t)
-  
+
   ;; Set up the visible bell
   (setq visible-bell nil)
-  
+
   ;; Set up the ring bell
   (setq ring-bell-function 'ignore)
-  
+
   ;; (column-number-mode)
   ;; (global-display-line-numbers-mode t)
   ;; (menu-bar--display-line-numbers-mode-relative)
-  
+
   ;; Set frame transparency
   (set-frame-parameter (selected-frame) 'alpha efs/frame-transparency)
   (add-to-list 'default-frame-alist `(alpha . ,efs/frame-transparency))
   ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-  
+
   ;; For correct fullscreen mode
   (setq frame-resize-pixelwise t)
-  
+
   ;; Disable line numbers for some modes
   (dolist (mode '(org-mode-hook
                   term-mode-hook
@@ -317,17 +326,21 @@ This section configures basic UI settings that remove unneeded elements to make 
                   eshell-mode-hook
                   treemacs-mode-hook))
     (add-hook mode (lambda () (display-line-numbers-mode 0))))
-  
+
   ;; Disable blink cursor
   (blink-cursor-mode 0)
-  
+
   ;; Accept 'y' and 'n' rather than 'yes' and 'no'.
   (defalias 'yes-or-no-p 'y-or-n-p)
-  
+
   ;; Stop creating backup and autosave files.
-  (setq make-backup-files nil
-        auto-save-default nil)
-  
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+
+  ;; Auto-revert files and dired buffers on change
+  (setq global-auto-revert-mode 1)
+  (setq global-auto-revert-non-file-buffers 1)
+
   ;; (server-start)
 #+end_src
 
@@ -422,14 +435,15 @@ This section configures basic UI settings that remove unneeded elements to make 
   ;;   (which-key-posframe-mode))
 #+end_src
 
-** Completions
-*** Savehist, Prescient
+** Savehist, Prescient
 
 #+begin_src emacs-lisp
   (use-package savehist
     :defer 1
     :init
-    (savehist-mode 1))
+    (savehist-mode 1)
+    :config
+    (setq history-length 25))
 
   (use-package prescient
     :disabled
@@ -437,6 +451,7 @@ This section configures basic UI settings that remove unneeded elements to make 
     (setq prescient-persist-mode 1))
 #+end_src
 
+** Completions
 *** Vertico, Marginalia, Conslult, savehist, Prescient
 [[https://github.com/minad/vertico][Vertico]] provides a minimalistic vertical completion UI, which is based on the default completion system.
 

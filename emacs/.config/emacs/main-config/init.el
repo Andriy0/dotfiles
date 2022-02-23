@@ -169,8 +169,12 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Stop creating backup and autosave files.
-(setq make-backup-files nil
-      auto-save-default nil)
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+
+;; Auto-revert files and dired buffers on change
+(setq global-auto-revert-mode 1)
+(setq global-auto-revert-non-file-buffers 1)
 
 ;; (server-start)
 
@@ -232,7 +236,9 @@
 (use-package savehist
   :defer 1
   :init
-  (savehist-mode 1))
+  (savehist-mode 1)
+  :config
+  (setq history-length 25))
 
 (use-package prescient
   :disabled
