@@ -173,8 +173,8 @@
 (setq auto-save-default nil)
 
 ;; Auto-revert files and dired buffers on change
-(setq global-auto-revert-mode 1)
-(setq global-auto-revert-non-file-buffers 1)
+;; (setq global-auto-revert-mode 1)
+;; (setq global-auto-revert-non-file-buffers 1)
 
 ;; (server-start)
 
