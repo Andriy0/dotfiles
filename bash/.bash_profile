@@ -3,7 +3,7 @@ if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
 
 source $HOME/.profile
 # Add packages installed by Nix to path
-source $HOME/.nix-profile/etc/profile.d/nix.sh
+# source $HOME/.nix-profile/etc/profile.d/nix.sh
 
 # Exports
 export PATH="$PATH:$HOME/.local/bin"
