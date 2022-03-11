@@ -486,6 +486,12 @@
   :config
   (direnv-mode))
 
+(use-package
+ '(asdf :type git :host github :repo "tabfugnic/asdf.el")
+ :config
+ (require 'asdf)
+ (asdf-enable))
+
 ;; (defun efs/lsp-mode-setup ()
 ;;   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
 ;;   (lsp-headerline-breadcrumb-mode))

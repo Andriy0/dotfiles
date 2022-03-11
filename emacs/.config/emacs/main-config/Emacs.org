@@ -787,6 +787,18 @@ the result is that programs started from within emacs, such as inferior shells, 
     :config
     (direnv-mode))
 #+end_src
+** ASDF
+[[https://github.com/tabfugnic/asdf.el][asdf.el]] is an Emacs interface for asdf version manager.
+
+It provides functions that plug into the cli through Emacs and adds the necessary environment setup so your software will run within Emacs.
+
+#+begin_src emacs-lisp
+  (use-package
+   '(asdf :type git :host github :repo "tabfugnic/asdf.el")
+   :config
+   (require 'asdf)
+   (asdf-enable))
+#+end_src
 
 ** Languages
 *** IDE Features with lsp-mode
