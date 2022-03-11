@@ -592,7 +592,10 @@
 
 (use-package ruby-mode
   :defer t
-  :hook (ruby-mode . company-mode))
+  :hook ((company-mode) . ruby-mode))
+
+(use-package robe
+  :defer t)
 
 (use-package haml-mode
   :hook 
