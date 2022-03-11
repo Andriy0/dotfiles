@@ -178,11 +178,9 @@
 
 ;; (server-start)
 
-(use-package modus-themes
-  :disabled)
+(use-package modus-themes)
 
-(use-package doom-themes
-  :disabled)
+(use-package doom-themes)
 
 ;; Color theme
 ;; (if (equal (system-name) "void")
