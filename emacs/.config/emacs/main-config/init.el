@@ -484,8 +484,9 @@
   :config
   (direnv-mode))
 
-(use-package
- '(asdf :type git :host github :repo "tabfugnic/asdf.el")
+(use-package asdf
+ :straight 
+ (asdf :type git :host github :repo "tabfugnic/asdf.el")
  :config
  (require 'asdf)
  (asdf-enable))
