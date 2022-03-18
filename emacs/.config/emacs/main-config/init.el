@@ -72,6 +72,10 @@
 ;; Make ESC quit prompts
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+;; Change some keys for Mac
+(setq mac-command-modifier 'control)
+(setq mac-control-modifier 'command)
+
 (use-package general
   :defer 1
   :config
