@@ -1286,6 +1286,14 @@ For more thoughts on Eshell, check out these articles by Pierre Neidhardt:
     ;;   :commands vterm)
 #+end_src
 
+*** Multi-vterm
+Managing multiple vterm buffers in Emacs This package is inspired by multi-term.el
+
+#+begin_src emacs-lisp
+  (use-package multi-vterm
+    :defer t)
+#+end_src
+
 * File Management
 ** Dired
 Dired is a computer program for editing file system directories. It typically runs inside the Emacs text editor as a specialized mode, though standalone versions have been written. Dired was the first file manager, or visual editor of file system information.
