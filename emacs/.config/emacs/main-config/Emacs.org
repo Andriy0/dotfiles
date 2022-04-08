@@ -996,6 +996,9 @@ Set guile as default scheme dialect to avoid annoying dialogs.
     :defer t
     :hook (ruby-mode . company-mode))
 
+  (use-package ruby-test-mode
+    :defer t)
+
   (use-package robe
     :defer t)
 #+end_src
