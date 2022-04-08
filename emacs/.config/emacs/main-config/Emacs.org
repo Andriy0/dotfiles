@@ -994,7 +994,7 @@ Set guile as default scheme dialect to avoid annoying dialogs.
 #+begin_src emacs-lisp
   (use-package ruby-mode
     :defer t
-    :hook ((company-mode) . ruby-mode))
+    :hook (ruby-mode . company-mode))
 
   (use-package robe
     :defer t)
