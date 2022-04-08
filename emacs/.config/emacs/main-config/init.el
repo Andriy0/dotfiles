@@ -596,7 +596,10 @@
 
 (use-package ruby-mode
   :defer t
-  :hook ((company-mode) . ruby-mode))
+  :hook (ruby-mode . company-mode))
+
+(use-package ruby-test-mode
+  :defer t)
 
 (use-package robe
   :defer t)
@@ -756,6 +759,9 @@
 
   ;; (use-package vterm
   ;;   :commands vterm)
+
+(use-package multi-vterm
+  :defer t)
 
 (use-package dired
   ;; :ensure nil
