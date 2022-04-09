@@ -1032,6 +1032,13 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
     :mode ("//.yaml'"))
 #+end_src
 
+*** CSV
+
+#+begin_src emacs-lisp
+  (use-package csv-mode
+    :defer t)
+#+end_src
+
 *** Markdown
 
 #+begin_src emacs-lisp

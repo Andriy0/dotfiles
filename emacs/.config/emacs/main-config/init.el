@@ -620,6 +620,9 @@
   :hook (yaml-mode . company-mode)
   :mode ("//.yaml'"))
 
+(use-package csv-mode
+  :defer t)
+
 (use-package markdown-mode
   :hook (markdown-mode . company-mode)
   :mode ("//.md'"))
