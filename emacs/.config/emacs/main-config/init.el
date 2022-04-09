@@ -380,6 +380,11 @@
   ;; :custom
   ;; (smooth-scrolling-mode 1))
 
+(use-package dashboard
+  :defer t
+  :config
+  (dashboard-setup-startup-hook))
+
 (defun efs/org-mode-setup ()
   (org-indent-mode 1)
   (electric-indent-local-mode -1)

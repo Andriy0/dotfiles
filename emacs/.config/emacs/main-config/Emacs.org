@@ -621,6 +621,16 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     ;; (smooth-scrolling-mode 1))
 #+end_src
 
+** Dashboard
+An extensible [[https://github.com/emacs-dashboard/emacs-dashboard][emacs startup screen]] showing you what’s most important.
+
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :defer t
+    :config
+    (dashboard-setup-startup-hook))
+#+end_src
+
 * Org Mode
 [[https://orgmode.org/][Org Mode]] is one of the hallmark features of Emacs. It is a rich document editor, project planner, task and time tracker, blogging engine, and literate coding utility all wrapped up in one package.
 
