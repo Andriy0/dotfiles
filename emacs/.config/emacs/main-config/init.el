@@ -381,7 +381,6 @@
   ;; (smooth-scrolling-mode 1))
 
 (use-package dashboard
-  :defer t
   :config
   (dashboard-setup-startup-hook))
 
