@@ -187,10 +187,8 @@
 (use-package doom-themes)
 
 ;; Color theme
-;; (if (equal (system-name) "void")
-;;     (load-theme 'modus-operandi t)
-;;   (load-theme 'modus-vivendi t))
-(load-theme 'modus-vivendi t)
+;; (load-theme 'modus-vivendi t)
+(load-theme 'modus-operandi t)
 
 (setq my-fixed-font-name "mononoki Nerd Font")
 

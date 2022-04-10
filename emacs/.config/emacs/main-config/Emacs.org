@@ -367,10 +367,8 @@ This section configures basic UI settings that remove unneeded elements to make 
 
 #+begin_src emacs-lisp
   ;; Color theme
-  ;; (if (equal (system-name) "void")
-  ;;     (load-theme 'modus-operandi t)
-  ;;   (load-theme 'modus-vivendi t))
-  (load-theme 'modus-vivendi t)
+  ;; (load-theme 'modus-vivendi t)
+  (load-theme 'modus-operandi t)
 #+end_src
 
 ** Font Configuration
