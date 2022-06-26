@@ -632,7 +632,7 @@
 (use-package plantuml-mode
   :defer t
   :config
-  (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
+  ;; (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
   (setq plantuml-default-exec-mode 'executable))
 
 (use-package graphviz-dot-mode

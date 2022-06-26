@@ -1072,7 +1072,7 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
   (use-package plantuml-mode
     :defer t
     :config
-    (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
+    ;; (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
     (setq plantuml-default-exec-mode 'executable))
 #+end_src
 
