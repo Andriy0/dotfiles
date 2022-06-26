@@ -635,6 +635,11 @@
   (setq plantuml-executable-path "~/.guix-profile/bin/plantuml")
   (setq plantuml-default-exec-mode 'executable))
 
+(use-package graphviz-dot-mode
+  :defer t
+  :config
+  (setq graphviz-dot-indent-width 2))
+
 (use-package grip-mode
   :defer t
   :config

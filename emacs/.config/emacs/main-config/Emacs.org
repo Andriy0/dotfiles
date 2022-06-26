@@ -1076,6 +1076,18 @@ The [[https://github.com/yoshiki/yaml-mode][emacs major mode]] for editing files
     (setq plantuml-default-exec-mode 'executable))
 #+end_src
 
+** Graphviz Mode
+Emacs [[https://github.com/ppareit/graphviz-dot-mode][package]] for working with [[https://graphviz.org/][Graphviz]] DOT-format files.
+
+The features of this package help you to create .dot or .gv files containing syntax compatible with Graphviz and use Graphviz to convert these files to diagrams. [[https://graphviz.org/][Graphviz]] is a set of open source graph visualization tools created by AT&T Labs Research. A graph is a way of representing information as a network of connected nodes (shapes) and edges (lines).
+
+#+begin_src emacs-lisp
+  (use-package graphviz-dot-mode
+    :defer t
+    :config
+    (setq graphviz-dot-indent-width 2))
+#+end_src
+
 ** Grip Mode
 
 #+begin_src emacs-lisp
